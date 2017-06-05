@@ -1,0 +1,25 @@
+{
+  "name": "Reddit-Clone",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mockgoose": "^7.3.1",
+    "react-scripts": "0.9.5",
+    "supertest": "^3.0.0"
+  },
+  "dependencies": {
+    "factory": "^1.0.3",
+    "factory-girl": "^4.2.2",
+    "faker": "^4.1.0",
+    "mongoose": "^4.10.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
