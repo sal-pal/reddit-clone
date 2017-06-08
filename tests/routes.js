@@ -11,19 +11,19 @@ describe('API', () => {
     })
     it('/insertPost', (done) => {
         request(app)
-            .post('/api//insertPost')
+            .post('/api/insertPost')
             .expect(200, done)
     })
     it('/getAllPosts', (done) => {
         request(app)
-            .post('/api//getAllPosts')
+            .post('/api/getAllPosts')
             .expect(200)
             .expect(checkResBody)
             .end(done)
     })
     it('/getCommentsByPost', (done) => {
         request(app)
-            .post('/api//getCommentsByPost')
+            .post('/api/getCommentsByPost')
             .expect(200)
             .expect(checkResBody)
             .end(done)
