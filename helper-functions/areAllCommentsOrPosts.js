@@ -1,23 +1,26 @@
-const each = require('foreach')
 const isCommentOrPost = require('./isCommentOrPost.js')
+const getObjVals = require('./getObjVals.js')
 
 
 
 
 function areAllCommentsOrPosts (modelName, inputObj) {
-    if (typeof modelName !== 'string') {
-        throw new TypeError('Need to pass string for modelName parameter')
+    
+    if (modelName !== 'post' && modelName !== 'comment') {
+        throw new TypeError("Need to pass either 'comment' or 'post' for modelName parameter")
     }
     
-    else if (modelName === 'post') {
-        
+    const values = getObjVals(inputObj)
+    for (var i=0; i < values.length; i++){
+        var val = values[i]
+        const isPost = isCommentOrPost(modelName, val)
+        if (!isPost) {return false}
     }
-        
-    else if (modelName === 'comment') {
-        
-    }
-    
-    else {
-        throw new Error("Need to pass 'comment' or 'post' for modelName")
-    }
+    return true
 }
+
+
+
+
+
+module.exports = areAllCommentsOrPosts
