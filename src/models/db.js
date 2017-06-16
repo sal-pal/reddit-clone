@@ -35,9 +35,30 @@ function insert (modelName, inputObj, callback) {
                 post.save()
             }
         }
+        else {
+            throw new TypeError('Need to pass correct object type for inputObj parameter')  
+        }
     }
     
-    //Code for comment
+    else if (modelName === 'comment') {
+        //Insert inputObj into the db if it is a comment
+        if (isCommentOrPost('comment', inputObj)) {
+            const comment = new Comment(inputObj)
+            comment.save((err) => callback(err))
+        }
+        //If inputObj's values are all comments, then insert all values into the db
+        else if (areAllCommentsOrPosts('post', inputObj)) {
+            const values = getObjVals(inputObj)
+            for (var i=0; i < values.length; i++){
+                var val = values[i]
+                const comment = new Comment(val)
+                comment.save()
+            }
+        }
+        else {
+            throw new TypeError('Need to pass correct object type for inputObj parameter')  
+        }
+    }
 }
 
 
