@@ -1,3 +1,12 @@
+/**
+        Verifies that all of an object's values are either posts or comments
+            -Output: a boolean
+            -Input:
+                a) modelName (string)
+                b) inputObj (an Object instance)
+**/
+
+
 const isCommentOrPost = require('./isCommentOrPost.js')
 const getObjVals = require('./getObjVals.js')
 

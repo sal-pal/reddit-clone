@@ -3,9 +3,19 @@ const ObjectId = require('mongoose').Types.ObjectId
 
 
 
-//Post factory
-module.exports = (quantity) => {
-    if (quantity === 1) {
+
+module.exports.makePosts = (amountToMk) => {
+    /**
+        Produces dumby posts for testing
+        
+            Input: amountToMk (number)
+            Output:
+                -A single post object
+                -An object whose values are post objects
+    **/
+    
+    
+    if (amountToMk === 1) {
          return {
             title: faker.lorem.words(),
             body: faker.lorem.sentences(),
@@ -13,17 +23,103 @@ module.exports = (quantity) => {
         }
     }
     
-    var parent = {}
-    var num = 0
-    
-    while (num < quantity) {
-        parent[num] = {
-            title: faker.lorem.words(),
-            body: faker.lorem.sentences(),
-            author: ObjectId()
+    if (amountToMk > 1) {
+        var parent = {}
+        var i = 0
+
+        while (i < amountToMk) {
+            parent[i] = {
+                title: faker.lorem.words(),
+                body: faker.lorem.sentences(),
+                author: ObjectId()
+            }
+            i += 1
         }
-        num += 1
+        return parent       
     }
     
-    return parent
+    throw new Error('Need to pass an int greater than 0 for amountToMk param')
+    
+    
 }
+
+
+
+module.exports.makeComments = (amountToMk, customAttrs) => {
+    /**
+        Produces dumby comments for testing, but can assign a custom value to one required property
+        
+            Input: 
+                1) amountToMk (number)
+                2) customAttrs (an Object instance): the key value pair for the property you wish to change and the value you wish to assign to it
+            
+            Output:
+                -A single post object
+                -An object whose values are post objects
+    **/    
+    
+    
+    if (amountToMk === 1 & !customAttrs) {
+        return {
+            parent: ObjectId(),
+            comment: faker.lorem.sentences(),
+            author: ObjectId()
+        }
+    }
+    
+    if (amountToMk === 1 && customAttrs) {
+        const comment = {
+            parent: ObjectId(),
+            comment: faker.lorem.sentences(),
+            author: ObjectId()
+        }
+        const propToChng = customAttrs[0]
+        const newVal = customAttrs[1]
+        comment[propToChng] = newVal
+        
+        return comment
+    }
+    
+    //Prepping variables for creating multiple comments
+    var parent = {}
+    var i = 0
+    
+    
+    if (amountToMk > 1 && !customAttrs) {
+        while (i < amountToMk) {
+            parent[i] = {
+                parent: ObjectId(),
+                comment: faker.lorem.sentences(),
+                author: ObjectId()
+            }
+            i += 1
+        }
+        return parent        
+    }
+    
+    if (amountToMk > 1 && customAttrs) {
+        while (i < amountToMk) {
+            var comment = {
+                parent: ObjectId(),
+                comment: faker.lorem.sentences(),
+                author: ObjectId()
+            }
+            const propToChng = customAttrs[0]
+            const newVal = customAttrs[1]
+            comment[propToChng] = newVal
+            
+            parent[i] = comment
+            i += 1
+        }
+        return parent 
+    }
+    
+    
+    throw new Error('Need to pass an int greater than 0 for amountToMk param')
+  
+}
+
+
+
+
+

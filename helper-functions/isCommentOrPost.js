@@ -1,10 +1,10 @@
 /**
-        Determines if an object adheres to either the comment or post schema
+        Determines if an object is either a post or comment
         
             -Output: A boolean 
             -Input:
-                a) modelName: (string) represents which schema you wish to test against
-                b) inputObj: the object you wish to test
+                a) modelName (string)
+                b) inputObj (Object instance)
                 
             Error Handling:
                 -Throws an error if modelName not assigned either of the strings 'comment' or 'post'

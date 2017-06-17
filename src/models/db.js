@@ -15,6 +15,22 @@ const getObjVals = require('../../helper-functions/getObjVals.js')
 
 
 function insert (modelName, inputObj, callback) {
+    
+    /**
+        Inserts one or multiple comment or post objects into the db. If multiple objects are passed, insert() expects them to be contained in an object wrapper
+
+            Input:
+                a) modelName (string)
+                b) inputObj (an Object instance): 
+                c) callback: executed only after a comment or post object has been inserted into the db, and it is only passed an error object
+                
+            Error Handling:
+                -Throws an exception when not passed either 'post' or 'comment' for modelName
+                -Throws an exception when inputObj is not a post or comment, or not passed an object wrapper containing post or comment objects
+    **/
+    
+    
+    
 
     if (modelName !== 'post' && modelName !== 'comment') {
         throw new TypeError("Need to pass either 'comment' or 'post' for modelName parameter")
