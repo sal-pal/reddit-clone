@@ -51,7 +51,8 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
         
             Input: 
                 1) amountToMk (number)
-                2) customAttrs (an Object instance): the key value pair for the property you wish to change and the value you wish to assign to it
+                2) customAttrs (an array): the key value pair for the property you wish to change and the value you wish to assign to it.
+                                           The first element (a string) is the key and the second element is the value.
             
             Output:
                 -A single post object
@@ -72,6 +73,10 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
             parent: ObjectId(),
             comment: faker.lorem.sentences(),
             author: ObjectId()
+        }
+        const isArray = Array.isArray(customAttrs)
+        if (!isArray) {
+            throw TypeError('Need to pass an array for customAttrs parameter')
         }
         const propToChng = customAttrs[0]
         const newVal = customAttrs[1]
@@ -98,12 +103,18 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
     }
     
     if (amountToMk > 1 && customAttrs) {
+        const isArray = Array.isArray(customAttrs)
+        if (!isArray) {
+            throw TypeError('Need to pass an array for customAttrs parameter')
+        }        
+        
         while (i < amountToMk) {
             var comment = {
                 parent: ObjectId(),
                 comment: faker.lorem.sentences(),
                 author: ObjectId()
             }
+
             const propToChng = customAttrs[0]
             const newVal = customAttrs[1]
             comment[propToChng] = newVal
