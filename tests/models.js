@@ -30,13 +30,13 @@ describe('getAllPosts', () => {
         setTimeout(() => done(), 2000)
     })
     
-    it('returns an object containing all the posts of our app', (done) => {
+    it('returns an object containing all the posts of our app', done => {
         getAllPosts(result => {
             expect(result).to.eql(allPosts)
             done()
         })
     })  
-    
+        
     after(done => {
         Post.remove({}).then(() => done())
     })
