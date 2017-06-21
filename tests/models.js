@@ -1,5 +1,10 @@
 const expect = require('chai').expect
-const insert = require('../src/models/db.js').insert
+
+const db = require('../src/models/db.js')
+const getCommentsByPost = db.getCommentsByPost
+const getAllPosts = db.getAllPosts
+const insert = db.insert
+
 const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
 
@@ -15,45 +20,96 @@ mongoose.connect(url)
 
 
 
+
+
 describe('getAllPosts', () => {
-    const posts = makePosts(4)
+    const allPosts = makePosts(4)
     
     before(done => {   
-        insert('post', posts)
+        insert('post', allPosts)
         setTimeout(() => done(), 2000)
     })
+    
+    it('returns an object containing all the posts of our app', (done) => {
+        getAllPosts(result => {
+            expect(result).to.eql(allPosts)
+            done()
+        })
+    })  
     
     after(done => {
         Post.remove({}).then(() => done())
     })
-    
-    it('returns an object containing all the posts of our app', () => {
-        
-    })  
-    it('throws an error if a error arises in querying the database')
 })
 
 
 describe('getCommentsByPost', () => {
+    const singleComment = makeComments(1)
+    const customAttrs = ['parent', ObjectId()]
+    const multipleComments = makeComments(3, customAttrs)
     
-    before((done) => {
-        const singleComment = makeComments(1)
-        const customAttrs = ['parent', ObjectId()]
-        const multipleComments = makeComments(3, customAttrs)
-        
+    before(done => { 
         const callback = (err) => { if (err) {throw err} }
         insert('comment', singleComment, callback)
         insert('comment', multipleComments)
-        
         setTimeout(() => done(), 2000)
     })     
+    
+    it('returns an object representing a single comment if only one comment associated with post', done => {
+        const parent = singleComment.parent
+        getCommentsByPost(parent, results => {
+            expect(results).to.eql(singleComment)
+            done()
+        })
+    })
+    
+    it('returns an object containing multiple comments asssociated with a post', done => {
+        const parent = customAttrs[1]
+        getCommentsByPost(parent, results => {
+            expect(results).to.eql(multipleComments)
+            done()
+        })
+    })
     
     after(done => {
         Comment.remove({}).then(() => done())
     })
     
-    it('returns a string if no comments are found in the database')
-    it('returns an object representing a single comment if only one comment associated with post')
-    it('returns an object containing multiple comments asssociated with a post')
-    it('throws an error if a error arises in querying the database')    
+})
+         
+
+describe('insert', () => {
+    const post = makePosts(1)
+    const comment = makeComments(1)
+    
+    it('stores a new post in the db', done => {
+        insert('post', post, err => {
+            if (err) throw err
+            
+            Post.findOne(post, (err, result) => {
+                if (err) throw err
+                expect(result.author).to.eql(post.author)
+                expect(result.body).to.eql(post.body)
+                expect(result.title).to.eql(post.title)
+                done()
+            })
+        })
+    })
+    it('stores a new comment in the db', done => {
+        insert('comment', comment, err => {
+            if (err) throw err
+            
+            Comment.findOne(comment, (err, result) => {
+                if (err) throw err
+                expect(result.author).to.eql(comment.author)
+                expect(result.comment).to.eql(comment.comment)
+                expect(result.parent).to.eql(comment.parent)
+                done()
+            })
+        })        
+    })
+    
+    after(done => {
+        Comment.remove({}).then(() => done())
+    })
 })
