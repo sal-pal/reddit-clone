@@ -86,11 +86,9 @@ describe('insert', () => {
         insert('post', post, err => {
             if (err) throw err
             
-            Post.findOne(post, (err, result) => {
+            Post.findOne(post, '-_id -__v', {lean: true}, (err, result) => {
                 if (err) throw err
-                expect(result.author).to.eql(post.author)
-                expect(result.body).to.eql(post.body)
-                expect(result.title).to.eql(post.title)
+                expect(result).to.eql(post)
                 done()
             })
         })
@@ -110,6 +108,8 @@ describe('insert', () => {
     })
     
     after(done => {
-        Comment.remove({}).then(() => done())
+        Comment.remove({})
+            .then(() => Post.remove({}))
+            .then(() => done())
     })
 })
