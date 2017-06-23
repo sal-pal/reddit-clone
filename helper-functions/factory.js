@@ -27,7 +27,7 @@ module.exports.makePosts = (amountToMk) => {
         return parent       
     }
     
-    throw new Error('Need to pass an int greater than 0 for amountToMk param')
+    throw new Error('Need to pass an int greater than 0 for amountToMk parameter')
 }
 
 
