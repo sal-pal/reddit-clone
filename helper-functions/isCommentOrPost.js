@@ -19,26 +19,26 @@ const isValidObjectId = require('mongoose').Types.ObjectId.isValid
 
 module.exports = (modelName, inputObj) => {
     
-    if (typeof modelName !== 'string') {
-        throw new TypeError('Need to pass string for modelName parameter')
+    if (modelName !== 'post' && modelName !== 'comment') {
+        throw new Error("Need to pass either 'comment' or 'post' for modelName")
     }
     
     if (modelName === 'post') {
         
-        const inputHasTitle = inputObj.hasOwnProperty('title')
-        const inputHasBody = inputObj.hasOwnProperty('body')
-        const inputHasAuthor = inputObj.hasOwnProperty('author')
+        const postHasTitle = inputObj.hasOwnProperty('title')
+        const postHasBody = inputObj.hasOwnProperty('body')
+        const postHasAuthor = inputObj.hasOwnProperty('author')
+        const inputIsPost = (postHasTitle && postHasBody && postHasAuthor)
         
-        if (inputHasTitle && inputHasBody && inputHasAuthor) {
+        if (inputIsPost) {
             
             const titleIsString = (typeof inputObj.title === 'string')
             const bodyIsString = (typeof inputObj.body === 'string')
             const authorIsObjectId = isValidObjectId (inputObj.author)
+            const propsAreCorrectTypes = (titleIsString && bodyIsString && authorIsObjectId)
             
-            if (titleIsString && bodyIsString && authorIsObjectId) {
-                return true
-            }
-            else {return false}
+            if (propsAreCorrectTypes) return true
+            else return false
         }
         
         else {return false}
@@ -46,24 +46,22 @@ module.exports = (modelName, inputObj) => {
     
     else if (modelName === 'comment') {
         
-        const inputHasAuthor = inputObj.hasOwnProperty('author')
-        const inputHasParent = inputObj.hasOwnProperty('parent')
-        const inputHasComment = inputObj.hasOwnProperty('comment')
+        const commentHasAuthor = inputObj.hasOwnProperty('author')
+        const commentHasParent = inputObj.hasOwnProperty('parent')
+        const commentHasComment = inputObj.hasOwnProperty('comment')
+        const inputIsComment = (commentHasAuthor && commentHasParent && commentHasComment)
         
-        if (inputHasAuthor && inputHasParent && inputHasComment) {
+        if (inputIsComment) {
             
             const authorIsObjectId = isValidObjectId (inputObj.author)
             const parentIsObjectId = isValidObjectId (inputObj.parent)
             const commentIsString = (typeof inputObj.comment === 'string')
+            const propsAreCorrectTypes = (authorIsObjectId && parentIsObjectId && commentIsString)
             
-            if (authorIsObjectId && parentIsObjectId && commentIsString) {
-                return true
-            }
-            else {return false}
+            if (propsAreCorrectTypes) return true
+            else return false
         }
         
-        else {return false}    
+        else return false   
     }
-    
-    else {throw new Error("Need to pass either 'comment' or 'post' for modelName")}
 }
