@@ -1,3 +1,9 @@
+/**
+        Reminder: Set timeout to 10000 when executing these tests
+**/
+
+
+
 const expect = require('chai').expect
 
 const db = require('../src/models/db.js')
