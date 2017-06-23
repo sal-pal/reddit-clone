@@ -7,6 +7,7 @@ const insert = db.insert
 
 const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
+const getObjVals = require('../helper-functions/getObjVals')
 
 const Post = require('../src/models/Post.js')
 const Comment = require('../src/models/Comment.js')
@@ -32,7 +33,12 @@ describe('getAllPosts', () => {
     
     it('returns an object containing all the posts of our app', done => {
         getAllPosts(result => {
-            expect(result).to.eql(allPosts)
+            const postsArr = getObjVals(allPosts)
+            const sortedPostsArr = sortByProp(postsArr, 'title')
+            const resultArr = getObjVals(result)
+            const sortedResultArr = sortByProp(resultArr, 'title')
+            
+            expect(sortedResultArr).to.eql(sortedPostsArr)
             done()
         })
     })  
@@ -65,8 +71,13 @@ describe('getCommentsByPost', () => {
     
     it('returns an object containing multiple comments asssociated with a post', done => {
         const parent = customAttrs[1]
-        getCommentsByPost(parent, results => {
-            expect(results).to.eql(multipleComments)
+        getCommentsByPost(parent, result => {
+            const commentsArr = getObjVals(multipleComments)
+            const sortedCommentsArr = sortByProp(commentsArr, 'comment')
+            const resultArr = getObjVals(result)
+            const sortedResultArr = sortByProp(resultArr, 'comment')
+            
+            expect(sortedResultArr).to.eql(sortedCommentsArr)
             done()
         })
     })
@@ -113,3 +124,18 @@ describe('insert', () => {
             .then(() => done())
     })
 })
+
+
+
+
+
+
+
+
+function sortByProp (arr, prop) {
+    arr.sort((a, b) => {
+        if (a[prop] < b[prop]) return -1
+        if (a[prop] > b[prop]) return 1
+        return 0
+    })
+}
