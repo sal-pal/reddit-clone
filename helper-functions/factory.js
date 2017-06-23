@@ -15,32 +15,19 @@ module.exports.makePosts = (amountToMk) => {
     **/
     
     
-    if (amountToMk === 1) {
-         return {
-            title: faker.lorem.words(),
-            body: faker.lorem.sentences(),
-            author: ObjectId()
-        }
-    }
+    if (amountToMk === 1) return createPost()
     
     if (amountToMk > 1) {
         var parent = {}
         var i = 0
-
         while (i < amountToMk) {
-            parent[i] = {
-                title: faker.lorem.words(),
-                body: faker.lorem.sentences(),
-                author: ObjectId()
-            }
+            parent[i] = createPost()
             i += 1
         }
         return parent       
     }
     
     throw new Error('Need to pass an int greater than 0 for amountToMk param')
-    
-    
 }
 
 
@@ -59,30 +46,20 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
                 -An object whose values are post objects
     **/    
     
+    const needOneCommentWithNoCustomization = (amountToMk === 1 & !customAttrs)
+    if (needOneCommentWithNoCustomization) return createComment()
     
-    if (amountToMk === 1 & !customAttrs) {
-        return {
-            parent: ObjectId(),
-            comment: faker.lorem.sentences(),
-            author: ObjectId()
-        }
-    }
     
-    if (amountToMk === 1 && customAttrs) {
-        const comment = {
-            parent: ObjectId(),
-            comment: faker.lorem.sentences(),
-            author: ObjectId()
+    const needOneCommentWithCustomization = (amountToMk === 1 && customAttrs)
+    if (needOneCommentWithCustomization) {
+        const comment = createComment()
+        try {
+            const customComment = assignNewValToProp(comment, customAttrs)
         }
-        const isArray = Array.isArray(customAttrs)
-        if (!isArray) {
-            throw TypeError('Need to pass an array for customAttrs parameter')
+        catch(err) {
+            throw new TypeError('Need to pass an array for customAttrs parameter')
         }
-        const propToChng = customAttrs[0]
-        const newVal = customAttrs[1]
-        comment[propToChng] = newVal
-        
-        return comment
+        return customComment
     }
     
     //Prepping variables for creating multiple comments
@@ -90,37 +67,27 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
     var i = 0
     
     
-    if (amountToMk > 1 && !customAttrs) {
+    const needMultCommentsWithNoCustomization = (amountToMk > 1 && !customAttrs)
+    if (needMultCommentsWithNoCustomization) {
         while (i < amountToMk) {
-            parent[i] = {
-                parent: ObjectId(),
-                comment: faker.lorem.sentences(),
-                author: ObjectId()
-            }
+            parent[i] = createComment()
             i += 1
         }
         return parent        
     }
     
-    if (amountToMk > 1 && customAttrs) {
-        const isArray = Array.isArray(customAttrs)
-        if (!isArray) {
-            throw TypeError('Need to pass an array for customAttrs parameter')
-        }        
-        
+    const needMultCommentsWithCustomization = (amountToMk > 1 && customAttrs)
+    if (needMultCommentsWithCustomization) { 
         while (i < amountToMk) {
-            var comment = {
-                parent: ObjectId(),
-                comment: faker.lorem.sentences(),
-                author: ObjectId()
+            var comment = createComment()
+            try {
+                const customComment = assignNewValToProp(comment, customAttrs)
+                parent[i] = customComment
+                i += 1
             }
-
-            const propToChng = customAttrs[0]
-            const newVal = customAttrs[1]
-            comment[propToChng] = newVal
-            
-            parent[i] = comment
-            i += 1
+            catch(err) {
+                throw new TypeError('Need to pass an array for customAttrs parameter')
+            }            
         }
         return parent 
     }
@@ -134,3 +101,31 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
 
 
 
+
+
+function createPost() {
+    return {
+        title: faker.lorem.words(),
+        body: faker.lorem.sentences(),
+        author: ObjectId()
+    }
+}
+
+function createComment() {
+    return {
+        parent: ObjectId(),
+        comment: faker.lorem.sentences(),
+        author: ObjectId()
+    }
+}
+
+function assignNewValToProp (obj, keyValPair) {
+    const isArray = Array.isArray(keyValPair)
+    if (!isArray) {
+        throw TypeError('Need to pass an array for keyValPair parameter')
+    }
+    const propToChng = keyValPair[0]
+    const newVal = keyValPair[1]
+    obj[propToChng] = newVal
+    return obj
+}
