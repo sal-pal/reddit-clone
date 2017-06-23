@@ -33,6 +33,7 @@ describe('getAllPosts', () => {
     
     it('returns an object containing all the posts of our app', done => {
         getAllPosts(result => {
+            //Getting our posts in a form that allows us to test for equality
             const postsArr = getObjVals(allPosts)
             const sortedPostsArr = sortByProp(postsArr, 'title')
             const resultArr = getObjVals(result)
@@ -72,6 +73,7 @@ describe('getCommentsByPost', () => {
     it('returns an object containing multiple comments asssociated with a post', done => {
         const parent = customAttrs[1]
         getCommentsByPost(parent, result => {
+            //Getting our comments in a form that allows us to test for equality
             const commentsArr = getObjVals(multipleComments)
             const sortedCommentsArr = sortByProp(commentsArr, 'comment')
             const resultArr = getObjVals(result)
