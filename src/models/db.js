@@ -7,7 +7,7 @@ const Comment = require('./Comment.js')
 const isCommentOrPost = require('../../helper-functions/isCommentOrPost.js')
 const areAllCommentsOrPosts = require('../../helper-functions/areAllCommentsOrPosts.js')
 const getObjVals = require('../../helper-functions/getObjVals.js')
-
+const convertArrToObj = require('../../helper-functions/convertArrToObj.js')
 
 
 
@@ -73,4 +73,30 @@ module.exports.insert = (modelName, inputObj, callback) => {
             throw new TypeError('Need to pass correct object type for inputObj parameter')  
         }
     }
+}
+
+
+
+module.exports.getAllPosts = (callback) => {
+    Post.find({}, '-_id -__v', {lean: true}, (err, result) => {
+        if (err) throw err
+        if (result.length === 0) throw new Error('No posts found')
+        if (result.length === 1) return result[0]
+        
+        const posts = convertArrToObj(result)
+        callback(posts)
+    })
+}
+
+
+module.exports.getCommentsByPost = (objectId, callback) => {
+    Comment.find({parent: objectId}, '-_id -__v', {lean: true}, (err, result) => {
+        if (err) throw err
+        if (result.length === 0) throw new Error('No comments found')
+        if (result.length === 1) callback(result[0])
+        
+        
+        const comments = convertArrToObj(result)
+        callback(comments)
+    })    
 }
