@@ -19,9 +19,4 @@ const schema = new mongoose.Schema({
 })
 
 
-schema.statics.getByPost = function(id) {
-    return this.find({ parent: id }).populate('author -parent', '-_id username')
-}
-
-
 module.exports = mongoose.model("Comment", schema)
