@@ -1,13 +1,28 @@
+const mongoose = require('mongoose')
 const request = require('supertest')
 const express = require('express')
+const router = require('../src/controls/routes.js')
+const makeComments = require('../helper-functions/factory.js').makeComments
 const app = express()
+
+const Comment = require('../src/models/Comment.js')
+
+const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  
+mongoose.connect(url)
+
+
+
+
+app.use('/api', router)
 
 
 describe('API', () => {
     it('/insertComment', (done) => {
         request(app)
-          .get('/api/insertComment')
-          .expect(200, done)            
+            .post('/api/insertComment')
+            .set('Content-Type', 'application/json')
+            .send(makeComments(1))
+            .expect(200, done)            
     })
     it('/insertPost', (done) => {
         request(app)
@@ -16,17 +31,20 @@ describe('API', () => {
     })
     it('/getAllPosts', (done) => {
         request(app)
-            .post('/api/getAllPosts')
+            .get('/api/getAllPosts')
             .expect(200)
             .expect(checkResBody)
             .end(done)
     })
     it('/getCommentsByPost', (done) => {
         request(app)
-            .post('/api/getCommentsByPost')
+            .get('/api/getCommentsByPost')
             .expect(200)
             .expect(checkResBody)
             .end(done)
+    })
+    after(done => {
+        Comment.remove({}).then(() => done())
     })
 })
 
