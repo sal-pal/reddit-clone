@@ -93,7 +93,7 @@ module.exports.getCommentsByPost = (objectId, callback) => {
     Comment.find({parent: objectId}, '-_id -__v', {lean: true}, (err, result) => {
         if (err) throw err
         if (result.length === 0) throw new Error('No comments found')
-        if (result.length === 1) callback(result[0])
+        if (result.length === 1) return callback(result[0])
         
         
         const comments = convertArrToObj(result)
