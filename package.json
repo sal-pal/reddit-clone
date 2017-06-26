@@ -9,8 +9,8 @@
     "supertest": "^3.0.0"
   },
   "dependencies": {
-    "factory": "^1.0.3",
-    "factory-girl": "^4.2.2",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
     "faker": "^4.1.0",
     "mongoose": "^4.10.1",
     "react": "^15.5.4",
