@@ -1,11 +1,13 @@
 const mongoose = require('mongoose')
 const request = require('supertest')
 const express = require('express')
-const router = require('../src/controls/routes.js')
-const makeComments = require('../helper-functions/factory.js').makeComments
 const app = express()
+const router = require('../src/controls/routes.js')
 
+const makeComments = require('../helper-functions/factory.js').makeComments
+const makePosts = require('../helper-functions/factory.js').makePosts
 const Comment = require('../src/models/Comment.js')
+const Post = require('../src/models/Post.js')
 
 const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  
 mongoose.connect(url)
@@ -27,6 +29,8 @@ describe('API', () => {
     it('/insertPost', (done) => {
         request(app)
             .post('/api/insertPost')
+            .set('Content-Type', 'application/json')
+            .send(makePosts(1))
             .expect(200, done)
     })
     it('/getAllPosts', (done) => {
@@ -44,7 +48,9 @@ describe('API', () => {
             .end(done)
     })
     after(done => {
-        Comment.remove({}).then(() => done())
+        Comment.remove({})
+            .then(() => Post.remove({}))
+            .then(() => done())
     })
 })
 

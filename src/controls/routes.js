@@ -14,7 +14,11 @@ router.post('/insertComment', (req, res) => {
     })
 })
 
-
+router.post('/insertPost', (req, res) => {
+    insert('post', req.body, (err) => {
+        if (!err) res.sendStatus(200)
+    })
+})
 
 
 module.exports = router
