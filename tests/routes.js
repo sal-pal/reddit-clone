@@ -8,6 +8,7 @@ const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
 const Comment = require('../src/models/Comment.js')
 const Post = require('../src/models/Post.js')
+const insert = require('../src/models/db.js').insert
 
 const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  
 mongoose.connect(url)
@@ -19,6 +20,16 @@ app.use('/api', router)
 
 
 describe('API', () => {
+    const singleComment = makeComments(1)
+    const parent = singleComment.parent
+    before(done => {   
+        const callback = (err) => { if (err) {throw err} }
+        insert('comment', singleComment, callback)
+        
+        const allPosts = makePosts(4)
+        insert('post', allPosts)
+        setTimeout(() => done(), 4000)
+    })    
     it('/insertComment', (done) => {
         request(app)
             .post('/api/insertComment')
@@ -37,14 +48,14 @@ describe('API', () => {
         request(app)
             .get('/api/getAllPosts')
             .expect(200)
-            .expect(checkResBody)
+            .expect(hasResBody)
             .end(done)
     })
     it('/getCommentsByPost', (done) => {
         request(app)
-            .get('/api/getCommentsByPost')
+            .get('/api/getCommentsByPost/' + parent)
             .expect(200)
-            .expect(checkResBody)
+            .expect(hasResBody)
             .end(done)
     })
     after(done => {
@@ -57,7 +68,7 @@ describe('API', () => {
 
 
 
-function checkResBody(res) {
+function hasResBody(res) {
     const respBodyEmpty = Object.keys(res.body).length === 0 && res.body.constructor === Object
     if (respBodyEmpty) {
         throw new Error('Response body needs to contain data')
