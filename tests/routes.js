@@ -3,6 +3,8 @@ const request = require('supertest')
 const express = require('express')
 const app = express()
 const router = require('../src/controls/routes.js')
+const apiRouter = router.apiRouter
+const loginHandler = router.loginHandler
 
 const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
@@ -15,43 +17,49 @@ mongoose.connect(url)
 
 
 
+app.post('/login', loginHandler)
+app.use('/api', apiRouter)
 
-app.use('/api', router)
 
-
-describe('API', () => {
+describe('Routes', () => {
     const singleComment = makeComments(1)
     const parent = singleComment.parent
     before(done => {   
-        const callback = (err) => { if (err) {throw err} }
-        insert('comment', singleComment, callback)
+        prepareTestData(singleComment, done)
         
-        const allPosts = makePosts(4)
-        insert('post', allPosts)
-        setTimeout(() => done(), 4000)
-    })    
-    it('/insertComment', (done) => {
+    })
+    it('Responses from /login contain a cookie', (done) => {
+        request.post('/login')
+            .send(credentials)
+            .expect(200)
+            .expect((res) => {
+                if (!res.body.token) {
+                    throw new Error('Authentication Failed: response did not contain a cookie')
+                }
+            })
+    })
+    it('/api/insertComment', (done) => {
         request(app)
             .post('/api/insertComment')
             .set('Content-Type', 'application/json')
             .send(makeComments(1))
             .expect(200, done)            
     })
-    it('/insertPost', (done) => {
+    it('/api/insertPost', (done) => {
         request(app)
             .post('/api/insertPost')
             .set('Content-Type', 'application/json')
             .send(makePosts(1))
             .expect(200, done)
     })
-    it('/getAllPosts', (done) => {
+    it('/api/getAllPosts', (done) => {
         request(app)
             .get('/api/getAllPosts')
             .expect(200)
             .expect(hasResBody)
             .end(done)
     })
-    it('/getCommentsByPost', (done) => {
+    it('/api/getCommentsByPost', (done) => {
         request(app)
             .get('/api/getCommentsByPost/' + parent)
             .expect(200)
@@ -73,4 +81,13 @@ function hasResBody(res) {
     if (respBodyEmpty) {
         throw new Error('Response body needs to contain data')
     }
+}
+
+function prepareTestData (singleComment, done) {
+    const callback = (err) => { if (err) {throw err} }
+    insert('comment', singleComment, callback)
+
+    const allPosts = makePosts(4)
+    insert('post', allPosts)
+    setTimeout(() => done(), 4000)    
 }
