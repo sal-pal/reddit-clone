@@ -24,9 +24,19 @@ app.use('/api', apiRouter)
 describe('Routes', () => {
     const singleComment = makeComments(1)
     const parent = singleComment.parent
+    var token = undefined
+    var credentials = {}
     before(done => {   
-        prepareTestData(singleComment, done)
-        
+        prepareTestData(singleComment)
+        //Make a request to login endpoint
+        request(app)
+            .post('/login')
+            .send(credentials)
+            .expect((res) => {
+                console.log("Gathering the token")
+                token = {access_token: res.body.token}
+                done()
+            })
     })
     it('Responses from /login contain a cookie', (done) => {
         request(app)
@@ -45,6 +55,7 @@ describe('Routes', () => {
             .post('/api/insertComment')
             .set('Content-Type', 'application/json')
             .send(makeComments(1))
+            .query(token)
             .expect(200, done)            
     })
     it('/api/insertPost', (done) => {
@@ -52,6 +63,7 @@ describe('Routes', () => {
             .post('/api/insertPost')
             .set('Content-Type', 'application/json')
             .send(makePosts(1))
+            .query(token)
             .expect(200, done)
     })
     it('/api/getAllPosts', (done) => {
@@ -91,5 +103,5 @@ function prepareTestData (singleComment, done) {
 
     const allPosts = makePosts(4)
     insert('post', allPosts)
-    setTimeout(() => done(), 4000)    
+    setTimeout(() => {}, 4000)    
 }
