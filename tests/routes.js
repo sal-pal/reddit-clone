@@ -29,13 +29,15 @@ describe('Routes', () => {
         
     })
     it('Responses from /login contain a cookie', (done) => {
-        request.post('/login')
+        request(app)
+            .post('/login')
             .send(credentials)
             .expect(200)
             .expect((res) => {
                 if (!res.body.token) {
                     throw new Error('Authentication Failed: response did not contain a cookie')
                 }
+                done()
             })
     })
     it('/api/insertComment', (done) => {
