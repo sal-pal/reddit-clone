@@ -5,11 +5,11 @@ const ObjectId = mongoose.Schema.Types.ObjectId
 
 const schema = new mongoose.Schema({
     author: {
-        type: ObjectId, 
+        type: String, 
         required: true
     },
     parent: {
-        type: ObjectId, 
+        type: String, 
         required: true
     },
     comment: {

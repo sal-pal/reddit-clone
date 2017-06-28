@@ -12,7 +12,7 @@ const schema = new mongoose.Schema({
         required: true
     },
     author: {
-        type: ObjectId,
+        type: String,
         required: true
     }
 }) 
