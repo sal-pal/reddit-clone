@@ -58,7 +58,7 @@ describe('getAllPosts', () => {
 
 describe('getCommentsByPost', () => {
     const singleComment = makeComments(1)
-    const customAttrs = ['parent', ObjectId()]
+    const customAttrs = ['parent', 'username1']
     const multipleComments = makeComments(3, customAttrs)
     
     before(done => { 

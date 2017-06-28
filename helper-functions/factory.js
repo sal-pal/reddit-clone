@@ -1,5 +1,4 @@
 const faker = require('faker')
-const ObjectId = require('mongoose').Types.ObjectId
 
 
 
@@ -107,15 +106,15 @@ function createPost() {
     return {
         title: faker.lorem.words(),
         body: faker.lorem.sentences(),
-        author: ObjectId()
+        author: faker.lorem.words()
     }
 }
 
 function createComment() {
     return {
-        parent: ObjectId(),
+        parent: faker.lorem.words(),
         comment: faker.lorem.sentences(),
-        author: ObjectId()
+        author: faker.lorem.words()
     }
 }
 

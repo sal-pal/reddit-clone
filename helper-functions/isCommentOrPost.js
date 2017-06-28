@@ -12,9 +12,6 @@
 
 
 
-const isValidObjectId = require('mongoose').Types.ObjectId.isValid
-
-
 
 
 module.exports = (modelName, inputObj) => {
@@ -34,8 +31,8 @@ module.exports = (modelName, inputObj) => {
             
             const titleIsString = (typeof inputObj.title === 'string')
             const bodyIsString = (typeof inputObj.body === 'string')
-            const authorIsObjectId = isValidObjectId (inputObj.author)
-            const propsAreCorrectTypes = (titleIsString && bodyIsString && authorIsObjectId)
+            const authorIsString = (typeof inputObj.author === 'string')
+            const propsAreCorrectTypes = (titleIsString && bodyIsString && authorIsString)
             
             if (propsAreCorrectTypes) return true
             else return false
@@ -53,10 +50,10 @@ module.exports = (modelName, inputObj) => {
         
         if (inputIsComment) {
             
-            const authorIsObjectId = isValidObjectId (inputObj.author)
-            const parentIsObjectId = isValidObjectId (inputObj.parent)
+            const authorIsString = (typeof inputObj.author === 'string')
+            const parentIsString = (typeof inputObj.parent === 'string')
             const commentIsString = (typeof inputObj.comment === 'string')
-            const propsAreCorrectTypes = (authorIsObjectId && parentIsObjectId && commentIsString)
+            const propsAreCorrectTypes = (authorIsString && parentIsString && commentIsString)
             
             if (propsAreCorrectTypes) return true
             else return false
