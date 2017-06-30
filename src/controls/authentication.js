@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 const User = require('../models/User.js')
 
 
-
+//Configuring local authentication
 passport.use(new LocalStrategy(
     (username, password, done) => {
         User.findOne({username: username}, (err, user) => {
@@ -18,6 +18,17 @@ passport.use(new LocalStrategy(
         })
     }
 ))
+
+
+//Configuring app to have sessions 
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+passport.deserializeUser((id, done) => {
+    User.findById(id, function(err, user) {
+    done(err, user);
+  })
+})
 
 
 

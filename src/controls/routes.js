@@ -3,13 +3,18 @@ var router = express.Router()
 const bodyParser = require('body-parser')
 const db = require('../models/db.js')
 const passport = require('passport')
+const expressSession = require('express-session')
+
 
 
 
 //Routes for the API
 router.use(bodyParser.json())
+router.use(expressSession({{secret: 'aSecretKey'}}))
 router.use(passport.initialize())
 router.use(passport.session())
+
+
 
 router.post('/insertComment', (req, res) => {
     db.insert('comment', req.body, (err) => {
