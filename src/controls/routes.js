@@ -2,11 +2,14 @@ var express = require('express')
 var router = express.Router()
 const bodyParser = require('body-parser')
 const db = require('../models/db.js')
+const passport = require('passport')
 
 
 
-
+//Routes for the API
 router.use(bodyParser.json())
+router.use(passport.initialize())
+router.use(passport.session())
 
 router.post('/insertComment', (req, res) => {
     db.insert('comment', req.body, (err) => {
@@ -34,4 +37,10 @@ router.get('/getCommentsByPost/:parent', (req, res) => {
 })
 
 
-module.exports = router
+module.exports.loginHandler = (req, res) => {
+    
+}
+
+
+module.exports.apiRouter = router
+ 
