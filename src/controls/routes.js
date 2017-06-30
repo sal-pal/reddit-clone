@@ -1,18 +1,22 @@
-var express = require('express')
-var router = express.Router()
+const express = require('express')
+const router = express.Router()
 const bodyParser = require('body-parser')
 const db = require('../models/db.js')
 const passport = require('passport')
 const expressSession = require('express-session')
+const verifyAuth = require('../../helper-functions/verifyAuth.js')
 
 
 
 
-//Routes for the API
 router.use(bodyParser.json())
-router.use(expressSession({{secret: 'aSecretKey'}}))
+router.use(expressSession({secret: 'aSecretKey'}))
 router.use(passport.initialize())
 router.use(passport.session())
+
+//Used to protect routes against un-authenticated requests
+router.use('/insertComment', verifyAuth)
+router.use('/insertPost', verifyAuth)
 
 
 
