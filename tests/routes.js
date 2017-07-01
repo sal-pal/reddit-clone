@@ -3,8 +3,6 @@ const request = require('supertest')
 const express = require('express')
 const app = express()
 const router = require('../src/controls/routes.js')
-const apiRouter = router.apiRouter
-const loginHandler = router.loginHandler
 
 const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
@@ -17,8 +15,7 @@ mongoose.connect(url)
 
 
 
-app.post('/login', loginHandler)
-app.use('/api', apiRouter)
+app.use('/api', router)
 
 
 describe('Routes', () => {

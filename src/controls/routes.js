@@ -1,10 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const bodyParser = require('body-parser')
 const db = require('../models/db.js')
 const passport = require('passport')
+
 const expressSession = require('express-session')
 const verifyAuth = require('../../helper-functions/verifyAuth.js')
+const bodyParser = require('body-parser')
 
 
 
@@ -19,6 +20,10 @@ router.use('/insertComment', verifyAuth)
 router.use('/insertPost', verifyAuth)
 
 
+
+router.post('/login', passport.authenticate('local', {
+    failureFlash: 'Invalid username or password.'
+}))
 
 router.post('/insertComment', (req, res) => {
     db.insert('comment', req.body, (err) => {
@@ -46,10 +51,7 @@ router.get('/getCommentsByPost/:parent', (req, res) => {
 })
 
 
-module.exports.loginHandler = (req, res) => {
-    
-}
 
 
-module.exports.apiRouter = router
+module.exports = router
  
