@@ -10,22 +10,29 @@ const LocalStrategy = require('passport-local').Strategy
 
 
 passport.use(new LocalStrategy(
-    (username, password, done) => console.log('Verify Called')
+    (username, password, done) => {
+        console.log('Verify Called')
+        done()
+    }
 ))
 
-app.use(bodyParser.json())
+app.use(bodyParser())
 app.use(passport.initialize())
+app.use(passport.session())
 
 
-app.post('/login', passport.authenticate('local', {failureFlash: 'Invalid username or password.'}))
+app.post('/login', passport.authenticate('local'), (req, res) => {
+    console.log('Login route hit')
+})
+
+const server = app.listen(3000)
 
 describe('Routes', () => {
-    it('Responses from /login contain a cookie', (done) => {
-        request(app)
+    it('Responses from /login contain a cookie', () => {
+        request(server)
             .post('/login')
             .type('form')
             .send({username: 'srpalo'})
             .send({password: 'secretpassword'})
-        done()
     })
 })
