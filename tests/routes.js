@@ -28,6 +28,16 @@ passport.use(new LocalStrategy(
 ))
 
 
+passport.serializeUser((user, done) => {
+    done(null, user.id)
+})
+passport.deserializeUser((id, done) => {
+    User.findById(id, function(err, user) {
+    done(err, user);
+  })
+})
+
+
 app.use(bodyParser())
 app.use(passport.initialize())
 app.use(passport.session())
