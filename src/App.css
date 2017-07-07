@@ -2,16 +2,20 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.redditImg {
+    margin-right: 60%;
+    position: absolute;
+    display: inline;
+    top: 5px; left: 300px; 
 }
 
 .App-header {
-  background-color: #222;
-  height: 150px;
+  background-color: #cee3f8;
+  height: 15px;
+  position: relative;
   padding: 20px;
-  color: white;
+  border: solid #30b5b5;
+  border-width: thin
 }
 
 .App-intro {
