@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-const Post = require("./Post.js")
-import logo from './logo.svg';
+import ReactDOM from 'react-dom'
 const redditImg = require('./redditImg.png')
 import './App.css';
 
@@ -17,4 +16,16 @@ class App extends Component {
   }
 }
 
-export default App;
+
+
+
+function run() {
+    ReactDOM.render(<App/>, document.getElementById('root'));
+}
+
+if (window.addEventListener) {
+    window.addEventListener('DOMContentLoaded', run);
+} 
+else {
+    window.attachEvent('onload', run);
+}
