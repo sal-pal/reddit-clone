@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
-const redditImg = require('./redditImg.png')
-import './App.css';
 
 
 class App extends Component {
@@ -9,7 +7,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header" >
-            <img className='redditImg' src={redditImg}/>
+            <img src={require("./redditImg.png")} />
         </div>
       </div>
     );
