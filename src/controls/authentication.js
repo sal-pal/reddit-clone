@@ -22,11 +22,11 @@ passport.use(new LocalStrategy(
 
 //Configuring app to have sessions 
 passport.serializeUser((user, done) => {
-    done(null, user.id)
+    done(null, user._id)
 })
 passport.deserializeUser((id, done) => {
     User.findById(id, function(err, user) {
-    done(err, user);
+    done(err, user)
   })
 })
 

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const db = require('../models/db.js')
-const passport = require('passport')
+const passport = require('./authentication.js')
 
 const expressSession = require('express-session')
 const verifyAuth = require('../../helper-functions/verifyAuth.js')
@@ -10,20 +10,13 @@ const bodyParser = require('body-parser')
 
 
 
-router.use(bodyParser.json())
-router.use(expressSession({secret: 'aSecretKey'}))
-router.use(passport.initialize())
-router.use(passport.session())
-
 //Used to protect routes against un-authenticated requests
 router.use('/insertComment', verifyAuth)
 router.use('/insertPost', verifyAuth)
 
 
 
-router.post('/login', passport.authenticate('local', {
-    failureFlash: 'Invalid username or password.'
-}))
+router.post('/login', passport.authenticate('local'), (req, res) => res.end())
 
 router.post('/insertComment', (req, res) => {
     db.insert('comment', req.body, (err) => {
