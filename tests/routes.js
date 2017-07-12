@@ -41,7 +41,7 @@ describe('Routes', () => {
         prepareTestData(singleComment)
         //Make a request to login endpoint
         request(server)
-            .post('/login')
+            .post('/api/login')
             .type('form')
             .send({username: 'srpalo'})
             .send({password: 'secretpassword'})
@@ -52,7 +52,7 @@ describe('Routes', () => {
     })     
     it('Responses from /login contain a cookie', (done) => {
         request(server)
-            .post('/login')
+            .post('/api/login')
             .type('form')
             .send({username: 'srpalo'})
             .send({password: 'secretpassword'})
@@ -67,7 +67,7 @@ describe('Routes', () => {
     })
     it('/api/insertComment', (done) => {
         request(server)
-            .post('/insertComment')
+            .post('/api/insertComment')
             .set('Content-Type', 'application/json')
             .send(makeComments(1))
             .query(cookie)
@@ -75,7 +75,7 @@ describe('Routes', () => {
     })
     it('/api/insertPost', (done) => {
         request(server)
-            .post('/insertPost')
+            .post('/api/insertPost')
             .set('Content-Type', 'application/json')
             .send(makePosts(1))
             .query(cookie)
