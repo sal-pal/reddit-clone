@@ -52,9 +52,14 @@ app.use(passport.session())
 
 app.post('/login', passport.authenticate('local'), (req, res) => {
   console.log('Login route hit')
+  res.send('sup bro')
 })
 
 const server = app.listen(3000)
+
+const p = User.findOneAndUpdate({username: 'srpalo'}, {username: 'srpalo', password: 'secretpassword'}, { upsert: true }, function() {
+  console.log('user!')
+})
 
 describe('Routes', () => {
   it('Responses from /login contain a cookie', (done) => {
@@ -64,7 +69,7 @@ describe('Routes', () => {
       .send({username: 'srpalo'})
       .send({password: 'secretpassword'})
       .then((res) => {
-        console.log(res.status)
+        console.log(res)
         done()
       })
   })
