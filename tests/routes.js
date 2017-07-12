@@ -48,8 +48,6 @@ app.use(expressSession({secret: 'aSecretKey'}))
 app.use(passport.initialize())
 app.use(passport.session())
 
-
-
 app.post('/login', passport.authenticate('local'), (req, res) => {
   console.log('Login route hit')
   res.send('sup bro')
@@ -57,20 +55,22 @@ app.post('/login', passport.authenticate('local'), (req, res) => {
 
 const server = app.listen(3000)
 
-const p = User.findOneAndUpdate({username: 'srpalo'}, {username: 'srpalo', password: 'secretpassword'}, { upsert: true }, function() {
-  console.log('user!')
-})
 
 describe('Routes', () => {
-  it('Responses from /login contain a cookie', (done) => {
-    request(server)
-      .post('/login')
-      .type('form')
-      .send({username: 'srpalo'})
-      .send({password: 'secretpassword'})
-      .then((res) => {
-        console.log(res)
-        done()
-      })
-  })
+    it('Responses from /login contain a cookie', (done) => {
+        request(server)
+            .post('/login')
+            .type('form')
+            .send({username: 'srpalo'})
+            .send({password: 'secretpassword'})
+            .expect(200)
+            .then((res) => {
+                const cookie = res.header['set-cookie'][0]
+                if (!cookie) {
+                    throw new Error('Authentication Failed: response did not contain a cookie')
+                }
+                done()
+            })
+
+    })
 })
