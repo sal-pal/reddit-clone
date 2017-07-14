@@ -20,6 +20,7 @@ router.post('/login', passport.authenticate('local'), (req, res) => res.end())
 
 router.post('/insertComment', (req, res) => {
     db.insert('comment', req.body, (err) => {
+        console.log("insertComment callback called")
         if (!err) res.sendStatus(200)
     })
 })

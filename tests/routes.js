@@ -34,12 +34,7 @@ const server = app.listen(3000)
 
 
 describe('Routes', () => {
-    const singleComment = makeComments(1)
-    const parent = singleComment.parent
-    var credentials = {}
     before(done => {   
-        prepareTestData(singleComment)
-        //Make a request to login endpoint
         request(server)
             .post('/api/login')
             .type('form')
@@ -50,36 +45,16 @@ describe('Routes', () => {
                 done()
             })
     })     
-    it('Responses from /login contain a cookie', (done) => {
-        request(server)
-            .post('/api/login')
-            .type('form')
-            .send({username: 'srpalo'})
-            .send({password: 'secretpassword'})
-            .expect(200)
-            .then((res) => {
-                const cookie = res.header['set-cookie'][0]
-                if (!cookie) {
-                    throw new Error('Authentication Failed: response did not contain a cookie')
-                }
-                done()
-            })   
-    })
     it('/api/insertComment', (done) => {
         request(server)
             .post('/api/insertComment')
             .set('Content-Type', 'application/json')
+            .set('Set-Cookie', cookie)
             .send(makeComments(1))
-            .query(cookie)
-            .expect(200, done)            
-    })
-    it('/api/insertPost', (done) => {
-        request(server)
-            .post('/api/insertPost')
-            .set('Content-Type', 'application/json')
-            .send(makePosts(1))
-            .query(cookie)
-            .expect(200, done)
+            .then((req, res) => {
+                console.log(res)
+                done()
+            })            
     })
     after(done => {
         Comment.remove({})
