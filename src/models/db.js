@@ -3,6 +3,7 @@ const isValidObjectId = mongoose.Types.ObjectId.isValid
 
 const Post = require('./Post.js')
 const Comment = require('./Comment.js')
+const User = require('./User.js')
 
 const isCommentOrPost = require('../../helper-functions/isCommentOrPost.js')
 const areAllCommentsOrPosts = require('../../helper-functions/areAllCommentsOrPosts.js')
@@ -14,7 +15,7 @@ const convertArrToObj = require('../../helper-functions/convertArrToObj.js')
 
 
 
-module.exports.insert = (modelName, inputObj, callback) => {
+module.exports.insert = function (modelName, inputObj, callback) {
     
     /**
         Inserts one or multiple comment or post objects into the db. If multiple objects are passed, insert() expects them to be contained in an object wrapper
@@ -76,8 +77,7 @@ module.exports.insert = (modelName, inputObj, callback) => {
 }
 
 
-
-module.exports.getAllPosts = (callback) => {
+module.exports.getAllPosts = function (callback) {
     Post.find({}, '-_id -__v', {lean: true}, (err, result) => {
         if (err) throw err
         if (result.length === 0) throw new Error('No posts found')
@@ -89,7 +89,7 @@ module.exports.getAllPosts = (callback) => {
 }
 
 
-module.exports.getCommentsByPost = (objectId, callback) => {
+module.exports.getCommentsByPost = function (objectId, callback) {
     Comment.find({parent: objectId}, '-_id -__v', {lean: true}, (err, result) => {
         if (err) throw err
         if (result.length === 0) throw new Error('No comments found')
@@ -99,4 +99,19 @@ module.exports.getCommentsByPost = (objectId, callback) => {
         const comments = convertArrToObj(result)
         callback(comments)
     })    
+}
+
+
+module.exports.createUser = function (credentials, callback) {
+    const username = {username: credentials.username}
+    User.findOne(username, (err, result) => {
+        if (err) return callback(err) 
+        if (result) return callback(null, 'Failure')
+
+        const user = new User(credentials)
+        user.save((err) => {
+            if (err) return callback(err)
+            return callback(null, 'Success')
+        })
+    })
 }
