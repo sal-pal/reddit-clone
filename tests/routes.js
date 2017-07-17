@@ -35,15 +35,22 @@ const server = app.listen(3000)
 
 describe('Routes', () => {
     before(done => {   
-        request(server)
-            .post('/api/login')
-            .type('form')
-            .send({username: 'srpalo'})
-            .send({password: 'secretpassword'})
-            .then((res) => {
-                cookie = res.header['set-cookie'][0]
-                done()
-            })
+        //Inserting credentials into db for sign up to fail, then logging in to retrieve a cookie
+        duplicateCredentials = {username: 'username0', password: 'password0'}
+        const user = new User(duplicateCredentials)
+        user.save((err) => {
+            if (err) throw err
+            request(server)
+                .post('/api/login')
+                .type('form')
+                .send({username: duplicateCredentials.username})
+                .send({password: "sdfa"})
+                .then((res) => {
+                    cookie = res.header['set-cookie'][0]
+                    console.log(cookie)
+                    done()
+                })        
+        })        
     })     
     it('/api/insertComment', (done) => {
         request(server)
@@ -52,9 +59,21 @@ describe('Routes', () => {
             .set('Set-Cookie', cookie)
             .send(makeComments(1))
             .then((req, res) => {
-                console.log(res)
                 done()
             })            
+    })
+    it('responses from /api/signup should have a response status of 200 if sending credentials not already contained in db', (done) => {
+        request(server)
+            .post('/api/signup')
+            .type('form')
+            .send({username: 'user'})
+            .send({password: 'password'})
+            .expect(200)
+            .then((res) => {
+                cookie = res.header['set-cookie'][0]
+                
+                done()
+            }) 
     })
     after(done => {
         Comment.remove({})
