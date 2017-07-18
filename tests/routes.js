@@ -1,18 +1,13 @@
 const request = require('supertest')
 const express = require('express')
 const app = express()
-
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-
-const User = require('../src/models/User.js')
 const expressSession = require('express-session')
-
 
 const mongoose = require('mongoose')
 const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  
 mongoose.connect(url)
-
 
 
 
@@ -39,33 +34,30 @@ passport.use(new LocalStrategy(
 passport.serializeUser((user, done) => {
     done(null, user._id)
 })
-passport.deserializeUser((id, done) => {router.post('/login', passport.authenticate('local'), (req, res) => res.end())
+passport.deserializeUser((id, done) => {
     User.findById(id, function(err, user) {
     done(err, user)
   })
 })
 
-
-app.post('/api/login', passport.authenticate('local'))
-
-
+app.use(expressSession({secret: 'aSecretKey'}))
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(expressSession({secret: 'aSecretKey'}))
 
+
+app.post('/api/login', passport.authenticate('local'), (req, res) => res.end())
 
 const server = app.listen(3000)
 
 
-    
+
 request(server)
     .post('/api/login')
     .type('form')
-    .send({username: "fakeuser"})
-    .send({password: "fakepassword"})
+    .send({username: "sasd"})
+    .send({password: "sdfa"})
     .then((res) => {
         cookie = res.header['set-cookie'][0]
+        console.log(res.status)
         console.log(cookie)
-    })
-              
-     
+    })  
