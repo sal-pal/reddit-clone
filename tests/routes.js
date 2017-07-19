@@ -1,15 +1,16 @@
 const request = require('supertest')
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const expressSession = require('express-session')
+const User = require('../src/models/User.js')
+
 
 const mongoose = require('mongoose')
 const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  
 mongoose.connect(url)
-
-
 
 
 
@@ -40,24 +41,56 @@ passport.deserializeUser((id, done) => {
   })
 })
 
+
+
+app.use(bodyParser())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(expressSession({secret: 'aSecretKey'}))
 app.use(passport.initialize())
 app.use(passport.session())
 
 
-app.post('/api/login', passport.authenticate('local'), (req, res) => res.end())
+app.post('/api/login',  function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err)   return next(err)
+    if (!user) return res.redirect('/login'); 
+    req.logIn(user, function(err) {
+      if (err) return next(err); 
+      return res.end()
+    });
+  })(req, res, next);
+})
+app.post('/api/insertComment', (req, res) => {
+    console.log(req.isAuthenticated())
+    res.end();
+})
+
+
+
 
 const server = app.listen(3000)
 
 
-
-request(server)
-    .post('/api/login')
-    .type('form')
-    .send({username: "sasd"})
-    .send({password: "sdfa"})
-    .then((res) => {
-        cookie = res.header['set-cookie'][0]
-        console.log(res.status)
-        console.log(cookie)
-    })  
+describe('Routes', () => {
+    before(done => {   
+        //Logging in the user
+        request(server)
+            .post('/api/login')
+            .type('form')
+            .send({username: 'srpalo'})
+            .send({password: 'secretpassword'})
+            .then((res) => {
+                cookie = res.header['set-cookie'][0]
+                done()
+            })
+    })     
+    it('/api/insertComment', (done) => {
+        request(server)
+            .post('/api/insertComment')
+            .set('Content-Type', 'application/json')
+            .set('Set-Cookie', cookie)
+            .then((req, res) => {
+                done()
+            })            
+    })    
+})
