@@ -71,26 +71,12 @@ app.post('/api/insertComment', (req, res) => {
 const server = app.listen(3000)
 
 
-describe('Routes', () => {
-    before(done => {   
-        //Logging in the user
-        request(server)
-            .post('/api/login')
-            .type('form')
-            .send({username: 'srpalo'})
-            .send({password: 'secretpassword'})
-            .then((res) => {
-                cookie = res.header['set-cookie'][0]
-                done()
-            })
-    })     
-    it('/api/insertComment', (done) => {
-        request(server)
-            .post('/api/insertComment')
-            .set('Content-Type', 'application/json')
-            .set('Set-Cookie', cookie)
-            .then((req, res) => {
-                done()
-            })            
-    })    
-})
+request(server)
+    .post('/api/login')
+    .type('form')
+    .send({username: 'srpalo'})
+    .send({password: 'secretpassword'})
+    .then((res) => {
+        cookie = res.header['set-cookie'][0]
+        done()
+    })
