@@ -15,40 +15,25 @@ mongoose.connect(url)
 
 
 //Configuring local authentication
-passport.use('local-login', new LocalStrategy({
-    // by default, local strategy uses username and password, we will override with email
-    usernameField : 'email',
-    passwordField : 'password',
-    passReqToCallback : true // allows us to pass back the entire request to the callback
-},
-function(req, email, password, done) { // callback with email and password from our form
-
-    // find a user whose email is the same as the forms email
-    // we are checking to see if the user trying to login already exists
-    console.log("Verify called")
-    User.findOne({ 'local.email' :  email }, function(err, user) {
-        // if there are any errors, return the error before anything else
-        if (err)
-            return done(err);
-
-        // if no user is found, return the message
-        if (!user)
-            return done(null, false); // req.flash is the way to set flashdata using connect-flash
-
-        // if the user is found but the password is wrong
-        if (!user.validPassword(password))
-            return done(null, false); // create the loginMessage and save it to session as flashdata
-
-        // all is well, return successful user
-        return done(null, user);
-    });
-
-}));
+passport.use(new LocalStrategy(
+    (username, password, done) => {
+        User.findOne({username: username}, (err, user) => {
+            if (err) return done(err)
+            if (!user) {
+                return done(null, false, {message: 'Incorrect username.'});
+            }
+            if (user.password !== password) {
+                return done(null, false, { message: 'Incorrect password.' })
+            }
+            return done(null, user)
+        })
+    }
+))
 
 
 //Configuring app to have sessions 
 passport.serializeUser((user, done) => {
-    done(null, user.id)
+    done(null, user._id)
 })
 passport.deserializeUser((id, done) => {
     User.findById(id, function(err, user) {
@@ -65,10 +50,19 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
-app.post('/api/login', passport.authenticate('local-login'));
+app.post('/api/login',  function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err)   return next(err)
+    if (!user) return res.redirect('/login'); 
+    req.logIn(user, function(err) {
+      if (err) return next(err); 
+      return res.end()
+    });
+  })(req, res, next);
+})
 app.post('/api/insertComment', (req, res) => {
-    console.log("Logged in: " + req.isAuthenticated())
-    res.end();
+    console.log(req.isAuthenticated())
+    res.end()
 })
 
 
@@ -86,16 +80,14 @@ describe('Routes', () => {
             .send({username: 'srpalo'})
             .send({password: 'secretpassword'})
             .then((res) => {
-                cookie = res.header['set-cookie'][0]
-                console.log("Login response status: " + res.status)
+                cookie = res.header['set-cookie']
                 done()
             })
     })     
     it('/api/insertComment', (done) => {
         request(server)
             .post('/api/insertComment')
-            .set('Content-Type', 'application/json')
-            .set('Set-Cookie', cookie)
+            .set('Cookie', cookie)
             .then((req, res) => {
                 done()
             })            
