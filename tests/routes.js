@@ -64,30 +64,45 @@ describe('Routes', () => {
             .send({password: 'invalid Password'})
             .expect(400, done)
     })
-    it('/api/insertComment', (done) => {
+    it('Responses from /insertComment should have 200 status after sending authenticated cookie', (done) => {
+        request(server)
+            .post('/api/insertComment')
+            .set('Content-Type', 'application/json')
+            .set('Cookie', cookie)
+            .send(makeComments(1))
+            .expect(200, done)            
+    })
+    it('Responses from /insertComment should have 401 status after not sending cookie', (done) => {
         request(server)
             .post('/api/insertComment')
             .set('Content-Type', 'application/json')
             .send(makeComments(1))
-            .query(token)
-            .expect(200, done)            
+            .expect(401, done)            
     })
-    it('/api/insertPost', (done) => {
+    it('Responses from /insertPost should have 200 status after sending authenticated cookie', (done) => {
+        request(server)
+            .post('/api/insertPost')
+            .set('Content-Type', 'application/json')
+            .set('Cookie', cookie)
+            .send(makePosts(1))
+            .set('Cookie', cookie)
+            .expect(200, done)
+    })
+    it('Responses from /insertPost should have 401 status after not sending cookie', (done) => {
         request(server)
             .post('/api/insertPost')
             .set('Content-Type', 'application/json')
             .send(makePosts(1))
-            .query(token)
-            .expect(200, done)
+            .expect(401, done)            
     })
-    it('/api/getAllPosts', (done) => {
+    it('Responses from /getAllPosts should have 200 status and a payload', (done) => {
         request(server)
             .get('/api/getAllPosts')
             .expect(200)
             .expect(hasResBody)
             .end(done)
     })
-    it('/api/getCommentsByPost', (done) => {
+    it('Responses from /getCommentsByPost should have 200 status and a payload', (done) => {
         request(server)
             .get('/api/getCommentsByPost/' + parent)
             .expect(200)
