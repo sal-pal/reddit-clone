@@ -16,12 +16,21 @@ router.use('/insertPost', verifyAuth)
 
 
 
-router.post('/login', passport.authenticate('local'), (req, res) => res.end())
+router.post('/api/login',  (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err)   return next(err)
+        if (!user) return res.redirect('/login'); 
+        req.logIn(user, function(err) {
+            if (err) return next(err); 
+            return res.end()
+        })
+    })(req, res, next);
+})
 
 router.post('/insertComment', (req, res) => {
     db.insert('comment', req.body, (err) => {
-        console.log("insertComment callback called")
-        if (!err) res.sendStatus(200)
+        if (err) return res.sendStatus(500)
+        return res.sendStatus(200)
     })
 })
 
