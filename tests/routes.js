@@ -32,17 +32,17 @@ const server = app.listen(3000)
 
 
 describe('Routes', () => {
+    //Preparing mock comment for /getCommentsByPost
     const singleComment = makeComments(1)
     const parent = singleComment.parent
-    var credentials = {}
     before(done => {   
-        prepareTestData(singleComment)
-        //Make a request to login endpoint
+        insertMockData(singleComment)
+        //Retrieving an authenticated cookie in order to make requests to protected routes
         request(server)
             .post('/api/login')
             .type('form')
-            .send({username: 'srpalo'})
-            .send({password: 'secretpassword'})
+            .send({username: 'valid username'})
+            .send({password: 'valid password'})
             .then((res) => {
                 cookie = res.header['set-cookie']
                 done()
@@ -52,16 +52,16 @@ describe('Routes', () => {
         request(server)
             .post('/api/login')
             .type('form')
-            .send({username: 'srpalo'})
-            .send({password: 'secretpassword'})
+            .send({username: 'valid username'})
+            .send({password: 'valid password'})
             .expect(200, done)
     })
     it('Responses from /login should have 400 status if sending invalid credentials', (done) => {
         request(server)
             .post('/api/login')
             .type('form')
-            .send({username: 'invalid Username'})
-            .send({password: 'invalid Password'})
+            .send({username: 'invalid username'})
+            .send({password: 'invalid password'})
             .expect(400, done)
     })
     it('Responses from /insertComment should have 200 status after sending authenticated cookie', (done) => {
@@ -126,10 +126,10 @@ function hasResBody(res) {
     }
 }
 
-function prepareTestData (singleComment, done) {
-    const callback = (err) => { if (err) {throw err} }
-    insert('comment', singleComment, callback)
-
+function insertMockData (singleComment) {
+    insert('comment', singleComment, err => {
+        if (err) {throw err} 
+    })
     const allPosts = makePosts(4)
     insert('post', allPosts)
     setTimeout(() => {}, 4000)    
