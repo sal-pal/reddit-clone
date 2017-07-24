@@ -44,7 +44,7 @@ passport.deserializeUser((id, done) => {
 
 
 app.use(bodyParser())
-app.use(bodyParser.urlencoded({ extended: false }))
+//app.use(bodyParser.urlencoded({ extended: false }))
 app.use(expressSession({secret: 'aSecretKey'}))
 app.use(passport.initialize())
 app.use(passport.session())
