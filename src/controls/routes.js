@@ -16,10 +16,10 @@ router.use('/insertPost', verifyAuth)
 
 
 
-router.post('/api/login',  (req, res, next) => {
+router.post('/login',  (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (err)   return next(err)
-        if (!user) return res.redirect('/login'); 
+        if (!user) return res.sendStatus(400); 
         req.logIn(user, function(err) {
             if (err) return next(err); 
             return res.end()
