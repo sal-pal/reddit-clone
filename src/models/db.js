@@ -111,7 +111,7 @@ module.exports.createUser = function (credentials, callback) {
         const user = new User(credentials)
         user.save((err) => {
             if (err) return callback(err)
-            return callback(null, 'Success')
+            return callback(null, user)
         })
     })
 }
