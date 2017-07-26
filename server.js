@@ -5,11 +5,11 @@ const app = express()
 
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/assets/index.html'))
+    res.sendFile(path.join(__dirname, '/src/frontend/assets/index.html'))
 })
 
 app.get('/app.js', (req, res) => {
-    res.sendFile(path.join(__dirname, '/src/assets/app.js'))
+    res.sendFile(path.join(__dirname, '/src/frontend/assets/app.js'))
 })
 
 
