@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 const request = require('supertest')
 const express = require('express')
 const app = express()
-const router = require('../src/controls/routes.js')
+const router = require('../src/backend/controls/routes.js')
 const passport = require('passport')
 
 const bodyParser = require('body-parser')
@@ -10,12 +10,12 @@ const expressSession = require('express-session')
 
 const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
-const insert = require('../src/models/db.js').insert
-const createUser = require('../src/models/db.js').createUser
+const insert = require('../src/backend/models/db.js').insert
+const createUser = require('../src/backend/models/db.js').createUser
 
-const Comment = require('../src/models/Comment.js')
-const Post = require('../src/models/Post.js')
-const User = require('../src/models/User.js')
+const Comment = require('../src/backend/models/Comment.js')
+const Post = require('../src/backend/models/Post.js')
+const User = require('../src/backend/models/User.js')
 
 
 const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  

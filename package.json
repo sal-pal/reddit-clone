@@ -21,7 +21,9 @@
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "react-image": "^1.0.1",
+    "react-imageloader": "^2.1.0"
   },
   "scripts": {
     "start": "webpack ./src/webpack.config.js && heroku local",

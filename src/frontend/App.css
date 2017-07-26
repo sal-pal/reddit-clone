@@ -1,0 +1,28 @@
+.App {
+  text-align: center;
+}
+
+.redditImg {
+    margin-right: 60%;
+    position: absolute;
+    display: inline;
+    top: 5px; left: 300px; 
+}
+
+.App-header {
+  background-color: #cee3f8;
+  height: 15px;
+  position: relative;
+  padding: 20px;
+  border: solid #30b5b5;
+  border-width: thin
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

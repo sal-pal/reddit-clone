@@ -6,7 +6,7 @@
 
 const expect = require('chai').expect
 
-const db = require('../src/models/db.js')
+const db = require('../src/backend/models/db.js')
 const getCommentsByPost = db.getCommentsByPost
 const getAllPosts = db.getAllPosts
 const insert = db.insert
@@ -16,9 +16,9 @@ const makeComments = require('../helper-functions/factory.js').makeComments
 const makePosts = require('../helper-functions/factory.js').makePosts
 const getObjVals = require('../helper-functions/getObjVals')
 
-const Post = require('../src/models/Post.js')
-const Comment = require('../src/models/Comment.js')
-const User = require('../src/models/User.js')
+const Post = require('../src/backend/models/Post.js')
+const Comment = require('../src/backend/models/Comment.js')
+const User = require('../src/backend/models/User.js')
 
 const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
