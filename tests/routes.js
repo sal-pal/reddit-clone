@@ -32,9 +32,24 @@ const server = app.listen(3000)
 
 
 describe('Routes', () => {
+    before(done => {   
+        //Retrieving an authenticated cookie in order to make requests to protected routes
+        request(server)
+            .post('/api/login')
+            .type('form')
+            .send({username: 'valid username'})
+            .send({password: 'valid password'})
+            .then((res) => {
+                cookie = res.header['set-cookie']
+                done()
+            })
+    })    
     it('Responses from /signup should have 200 status and an authenticated cookie', (done) => {
         request(server)
             .post('/api/signup')
+            .type('form')
+            .send({username: 'newUser'})
+            .send({password: 'newPassword'})
             .expect(200)
             .then(res => {
                 const signupCookie = res.headers['set-cookie']
@@ -44,6 +59,23 @@ describe('Routes', () => {
                     .set('Cookie', signupCookie)
                     .send(makePosts(1))
                     .expect(200, done)  
+            })
+    })
+    it("Responses from /signup should have 400 status if sending a signed up user's credentials. The response's cookie should also be unauthenticated", (done) => {
+        request(server)
+            .post('/api/signup')
+            .type('form')
+            .send({username: 'valid username'})
+            .send({password: 'valid password'})
+            .expect(400)
+            .then(res => {
+                const signupCookie = res.headers['set-cookie']
+                request(server)
+                    .post('/api/insertPost')
+                    .set('Content-Type', 'application/json')
+                    .set('Cookie', signupCookie)
+                    .send(makePosts(1))
+                    .expect(401, done)  
             })
     })
 })
