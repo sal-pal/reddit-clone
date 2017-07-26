@@ -17,14 +17,25 @@ router.use('/insertPost', verifyAuth)
 
 
 router.post('/login',  (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local-login', (err, user, info) => {
         if (err)   return next(err)
-        if (!user) return res.sendStatus(400); 
+        if (!user) return res.sendStatus(400)
         req.logIn(user, function(err) {
             if (err) return next(err); 
             return res.end()
         })
-    })(req, res, next);
+    })(req, res, next)
+})
+
+router.post('/signup', (req, res, next) => {
+    passport.authenticate('local-signup', (err, user, info) => {
+        if (err)   return next(err)
+        if (!user) return res.sendStatus(400)
+        req.logIn(user, function(err) {
+            if (err) return next(err); 
+            return res.end()
+        })
+    })(req, res, next)
 })
 
 router.post('/insertComment', (req, res) => {

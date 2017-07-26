@@ -107,7 +107,7 @@ module.exports.createUser = function (credentials, callback) {
     User.findOne(username, (err, result) => {
         if (err) return callback(err) 
         if (result) return callback(null, undefined)
-
+        
         const user = new User(credentials)
         user.save((err) => {
             if (err) return callback(err)
