@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
+const Post = './Post.js'
+import reddit from './redditImg.png'
+
     
     
     
@@ -30,8 +33,9 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="App-header" style={appHeaderStyling}>
-                    <img src='./redditImg.png' />
+                    <img src={reddit} />
                 </div>
+                <Post />
             </div>
         )
     }
