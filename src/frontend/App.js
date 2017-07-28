@@ -23,9 +23,19 @@ class App extends Component {
             left: '0'
         }
         
+        const postWrapperStyling = {
+            marginLeft: '150px',
+            marginTop: '100px'
+        }
+        
         return (
             <div className="App" style={bannerStyling}>
-                <Post title="Title" author="SalPal"/>
+                <div className="postWrapper" style={postWrapperStyling}>       
+                    <Post title="Title" author="SalPal"/>
+                    <Post title="Title" author="SalPal"/>
+                    <Post title="Title" author="SalPal"/>
+                    <Post title="Title" author="SalPal"/>
+                </div>
             </div>
         )
     }
