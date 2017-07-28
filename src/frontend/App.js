@@ -12,7 +12,7 @@ const Post = require('./Post.js')
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = {homePageRendered: false, postPageRendered: true}
+        this.state = {homePageRendered: true, postPageRendered: false}
     }  
     
     
@@ -39,10 +39,7 @@ class App extends Component {
             <div className="App" style={bannerStyling}>
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal"/>
-                        <Post title="Title" author="SalPal"/>
-                        <Post title="Title" author="SalPal"/>
-                        <Post title="Title" author="SalPal"/>
+                        <Post title="Title" author="SalPal" onClick={() => console.log("IT Works")}/>
                     </div>  
                 )}
             
