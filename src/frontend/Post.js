@@ -24,9 +24,9 @@ class Post extends Component {
         
         return (
             <div className="Post">
-                <p style={titleStyling}>
+                <a href="#" style={titleStyling}>
                     {this.props.title}
-                </p>
+                </a>
                 <p style={authorStyling}>
                     Submitted by {this.props.author}
                 </p>
