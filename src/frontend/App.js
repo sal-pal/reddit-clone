@@ -13,7 +13,18 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {homePageRendered: true, postPageRendered: false}
-    }  
+    }
+    
+    componentDidMount() {
+        //Enables navigating back to home page from post page
+        window.onpopstate = function () {
+            this.setState({homePageRendered: true, postPageRendered: false})
+        }.bind(this)      
+    }
+    
+    clickHandler() {
+        this.setState({postPageRendered: true, homePageRendered: false})
+    }
     
     
     render() {
@@ -39,7 +50,7 @@ class App extends Component {
             <div className="App" style={bannerStyling}>
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal" onClick={() => console.log("IT Works")}/>
+                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)}/>
                     </div>  
                 )}
             
