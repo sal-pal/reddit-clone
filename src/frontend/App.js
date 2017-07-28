@@ -25,7 +25,7 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
-                <Post />
+                <Post title="Title" author="SalPal"/>
             </div>
         )
     }

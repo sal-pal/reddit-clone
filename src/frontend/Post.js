@@ -1,31 +1,36 @@
-/**
-        Props:
-            1) title
-            2) user who submitted the post
-            4) Body
-            
-        State:
-            1) timeSincePosted
-            
-        -When press share button, a tiny share component appears.
-         Thus, should make a separate componnent for sharing url
-         
-        -When press comment button, a share component appears
-**/
-
-
 import React, { Component } from 'react'
+
 
 class Post extends Component {
     constructor(props) {
         super(props)
     }  
-    
+
     render() {
+        const titleStyling = {
+            fontWeight: 'normal',
+            marginBottom: '1px',
+            color: '#00F',
+            textDecoration: 'none',
+            font: 'medium verdana,arial,helvetica,sans-serif'
+            
+        }
+        
+        const authorStyling = {
+            color: '#888',
+            padding: '0px',
+            font: 'x-small verdana,arial,helvetica,sans-serif'  
+        }
+        
         return (
-          <div className="Post">
-            <h1>Hello World!</h1>
-          </div>
+            <div className="Post">
+                <p style={titleStyling}>
+                    {this.props.title}
+                </p>
+                <p style={authorStyling}>
+                    Submitted by {this.props.author}
+                </p>
+            </div>
         );
     }
 }
