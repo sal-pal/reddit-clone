@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
-const Post = require('./Post.js')
+import renderIf from 'render-if'
 import reddit from './redditImg.png'
+const Post = require('./Post.js')
+
 
     
     
     
 
 class App extends Component {
-
+    constructor(props) {
+        super(props)
+        this.state = {homePageRendered: false, postPageRendered: true}
+    }  
+    
+    
     render() {
         const bannerStyling = {
             backgroundColor: '#cee3f8',
@@ -23,19 +30,27 @@ class App extends Component {
             left: '0'
         }
         
-        const postWrapperStyling = {
+        const wrapperStyling = {
             marginLeft: '150px',
             marginTop: '100px'
         }
         
         return (
             <div className="App" style={bannerStyling}>
-                <div className="postWrapper" style={postWrapperStyling}>       
-                    <Post title="Title" author="SalPal"/>
-                    <Post title="Title" author="SalPal"/>
-                    <Post title="Title" author="SalPal"/>
-                    <Post title="Title" author="SalPal"/>
-                </div>
+                {renderIf(this.state.homePageRendered) (
+                    <div className="postWrapper" style={wrapperStyling}>       
+                        <Post title="Title" author="SalPal"/>
+                        <Post title="Title" author="SalPal"/>
+                        <Post title="Title" author="SalPal"/>
+                        <Post title="Title" author="SalPal"/>
+                    </div>  
+                )}
+            
+                {renderIf(this.state.postPageRendered) (
+                    <div className="postPage" style={wrapperStyling}> 
+                        <p>HelloWorld</p>
+                    </div>
+                )}
             </div>
         )
     }
