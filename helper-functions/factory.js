@@ -105,7 +105,6 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
 function createPost() {
     return {
         title: faker.lorem.words(),
-        body: faker.lorem.sentences(),
         author: faker.lorem.words()
     }
 }
