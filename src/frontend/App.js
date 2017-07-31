@@ -30,7 +30,7 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="App-header" style={appHeaderStyling}>
-                    <img src='./redditImg.png' />
+                    <img src={require('./redditImg.png')} />
                 </div>
             </div>
         )
