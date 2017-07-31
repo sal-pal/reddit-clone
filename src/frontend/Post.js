@@ -24,7 +24,7 @@ class Post extends Component {
         
         return (
             <div className="Post">
-                <a href="#" onClick={this.props.onClick} style={titleStyling}>
+                <a href="#" onClick={this.props.onClick} style={titleStyling} id='1'>
                     {this.props.title}
                 </a>
                 <p style={authorStyling}>

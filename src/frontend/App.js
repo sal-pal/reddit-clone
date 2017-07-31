@@ -22,8 +22,9 @@ class App extends Component {
         }.bind(this)      
     }
     
-    clickHandler() {
+    clickHandler(e) {
         this.setState({postPageRendered: true, homePageRendered: false})
+        console.log(e.target.attributes.getNamedItem('id').value)
     }
     
     
@@ -50,13 +51,13 @@ class App extends Component {
             <div className="App" style={bannerStyling}>
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)}/>
+                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} ref="1"/>
                     </div>  
                 )}
             
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
-                        <p>HelloWorld</p>
+                        {[this.refs['1']]}
                     </div>
                 )}
             </div>
