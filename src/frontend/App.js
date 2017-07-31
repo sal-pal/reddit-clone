@@ -42,6 +42,12 @@ class App extends Component {
             left: '0'
         }
         
+        const redditImgStyling = {
+            position: 'absolute',
+            top: '5px',
+            left: '160px'
+        }
+        
         const wrapperStyling = {
             marginLeft: '150px',
             marginTop: '100px'
@@ -49,7 +55,7 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
-                <img src={require('./redditImg.png')} />
+                <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
                         <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} ref="1"/>
