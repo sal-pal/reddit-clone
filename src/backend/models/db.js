@@ -78,13 +78,18 @@ module.exports.insert = function (modelName, inputObj, callback) {
 
 
 module.exports.getAllPosts = function (callback) {
-    Post.find({}, '-_id -__v', {lean: true}, (err, result) => {
+    Post.find({}, '-__v', {lean: true}, (err, result) => {
         if (err) throw err
         if (result.length === 0) throw new Error('No posts found')
         if (result.length === 1) return result[0]
         
-        const posts = convertArrToObj(result)
-        callback(posts)
+        const postsWithIds = result.map((post) => {
+            post.id = String(post._id)
+            delete post._id
+            return post
+        })
+        const finishedPosts = convertArrToObj(postsWithIds)
+        callback(finishedPosts)
     })
 }
 
