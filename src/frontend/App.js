@@ -12,14 +12,33 @@ const Post = require('./Post.js')
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = {homePageRendered: true, postPageRendered: false}
+        const allPosts = { 
+            '0': 
+                { title: 'ipsum maiores perspiciatis',
+                 author: 'consequatur est consequuntur',
+                 id: '597fadc7b702770f9181db58' },
+            '1': 
+                { title: 'dolorem nisi ut',
+                 author: 'aut dolorem neque',
+                 id: '597fadc7b702770f9181db5a' },
+            '2': 
+                { title: 'natus eligendi pariatur',
+                 author: 'quis qui soluta',
+                 id: '597fadc7b702770f9181db59' },
+            '3': 
+                { title: 'quibusdam quia eaque',
+                 author: 'consectetur perferendis ea',
+                 id: '597fadc7b702770f9181db5b' } 
+        }
+
+        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts}
     }
     
     componentDidMount() {
         //Enables navigating back to home page from post page
         window.onpopstate = function () {
             this.setState({homePageRendered: true, postPageRendered: false})
-        }.bind(this)      
+        }.bind(this)
     }
     
     clickHandler(e) {
