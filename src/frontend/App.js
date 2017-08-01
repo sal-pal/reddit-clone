@@ -42,8 +42,8 @@ class App extends Component {
     }
     
     clickHandler(e) {
-        this.setState({postPageRendered: true, homePageRendered: false})
-        console.log(e.target.attributes.getNamedItem('id').value)
+        this.setState({homePageRendered: false, postPageRendered: true})
+        //console.log(e.target.attributes.getNamedItem('id').value) 
     }
     
     
@@ -83,7 +83,7 @@ class App extends Component {
             
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
-                        {[this.refs['1']]}
+                        <Post title={this.state.allPosts['3'].title} author={this.state.allPosts['3'].author} />
                     </div>
                 )}
             </div>
