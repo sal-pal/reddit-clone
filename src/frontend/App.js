@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import renderIf from 'render-if'
 import reddit from './redditImg.png'
 const Post = require('./Post.js')
+const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
 
 
     
@@ -31,7 +32,7 @@ class App extends Component {
                  id: '597fadc7b702770f9181db5b' } 
         }
 
-        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts}
+        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts, targetPost: undefined}
     }
     
     componentDidMount() {
@@ -42,8 +43,10 @@ class App extends Component {
     }
     
     clickHandler(e) {
-        this.setState({homePageRendered: false, postPageRendered: true})
-        //console.log(e.target.attributes.getNamedItem('id').value) 
+        const targetPostID = e.target.attributes.getNamedItem('id').value
+        const targetPost = findObjByKeyValPair(this.state.allPosts, ['id', targetPostID])
+        console.log(targetPost)
+        this.setState({homePageRendered: false, postPageRendered: true, targetPost: targetPost})
     }
     
     
@@ -77,13 +80,13 @@ class App extends Component {
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} ref="1"/>
+                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} ref='597fadc7b702770f9181db58'/>
                     </div>  
                 )}
             
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
-                        <Post title={this.state.allPosts['3'].title} author={this.state.allPosts['3'].author} />
+                        <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
                     </div>
                 )}
             </div>
