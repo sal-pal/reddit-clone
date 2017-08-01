@@ -45,8 +45,8 @@ class App extends Component {
     clickHandler(e) {
         const targetPostID = e.target.attributes.getNamedItem('id').value
         const targetPost = findObjByKeyValPair(this.state.allPosts, ['id', targetPostID])
-        console.log(targetPost)
         this.setState({homePageRendered: false, postPageRendered: true, targetPost: targetPost})
+        console.log(targetPost)
     }
     
     
@@ -80,14 +80,8 @@ class App extends Component {
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} ref='597fadc7b702770f9181db58'/>
+                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} id='597fadc7b702770f9181db58'/>
                     </div>  
-                )}
-            
-                {renderIf(this.state.postPageRendered) (
-                    <div className="postPage" style={wrapperStyling}> 
-                        <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
-                    </div>
                 )}
             </div>
         )
