@@ -33,7 +33,7 @@ class App extends Component {
                  id: '597fadc7b702770f9181db5b' } 
         }
 
-        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts, targetPost: ""}
+        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts, targetPost: "", postList: []}
     }
     
     componentDidMount() {
@@ -42,8 +42,21 @@ class App extends Component {
             this.setState({homePageRendered: true, postPageRendered: false})
         }.bind(this)
         
-        const allPosts = fetch("http://localhost:5000/api/getAllPosts")
-        console.log(allPosts)
+        fetch("http://localhost:5000/api/getAllPosts")
+            .then(body => body.json())
+            .then(posts => {
+                const postList = getObjVals(posts).map(post => {
+                    return <Post 
+                        title={post.title} 
+                        author={post.author} 
+                        id={post.id} 
+                        titleHighlighted={true} 
+                        onClick={this.clickHandler.bind(this)} 
+                    />
+                
+                this.setState({postList: postList})
+                })  
+            })
     }
     
     clickHandler(e) {
@@ -104,9 +117,7 @@ class App extends Component {
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        {posts.map((post) => {
-                            return <Post title={post.title} author={post.author} id={post.id} titleHighlighted={true} onClick={this.clickHandler.bind(this)} />
-                        })}
+                        {this.state.postList}
                     </div>  
                 )}
                 
