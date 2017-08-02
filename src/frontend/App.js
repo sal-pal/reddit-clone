@@ -32,7 +32,7 @@ class App extends Component {
                  id: '597fadc7b702770f9181db5b' } 
         }
 
-        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts, targetPost: undefined}
+        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts, targetPost: ""}
     }
     
     componentDidMount() {
@@ -45,8 +45,7 @@ class App extends Component {
     clickHandler(e) {
         const targetPostID = e.target.attributes.getNamedItem('id').value
         const targetPost = findObjByKeyValPair(this.state.allPosts, ['id', targetPostID])
-        this.setState({homePageRendered: false, postPageRendered: true, targetPost: targetPost})
-        console.log(targetPost)
+        this.setState({targetPost: targetPost, homePageRendered: false, postPageRendered: true})
     }
     
     
@@ -83,6 +82,12 @@ class App extends Component {
                         <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} id='597fadc7b702770f9181db58'/>
                     </div>  
                 )}
+                
+                {renderIf(this.state.postPageRendered) (
+                    <div className="postPage" style={wrapperStyling}> 
+                        <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
+                    </div>
+                )}                
             </div>
         )
     }
