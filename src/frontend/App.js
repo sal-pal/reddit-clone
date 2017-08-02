@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import renderIf from 'render-if'
 import reddit from './redditImg.png'
 const Post = require('./Post.js')
+const Comment = require('./Comment.js')
 const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
 const getObjVals = require('../../helper-functions/getObjVals.js')
 
@@ -72,6 +73,22 @@ class App extends Component {
             marginTop: '100px'
         }
         
+        const commentHeader = {
+            fontSize: '15px',
+            fontWeight: '200',
+            color: '#4D5763',
+            marginTop: '8%'
+        }
+        
+        const commentContainerStyling = {
+            marginLeft: '1%',
+            marginRight: '18%',
+            paddingLeft: '1%',            
+            borderColor: '#e6eeff',
+            borderStyle: 'solid',
+            borderRadius: '5'
+        }
+        
         return (
             <div className="App" style={bannerStyling}>
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
@@ -84,6 +101,12 @@ class App extends Component {
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
+                        <p style={commentHeader}> Comments </p>
+                        <div style={commentContainerStyling}>
+                            <Comment author="srpalomino" body="sdafsdafasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+                            <Comment author="srpalomino" body="sdafsdafasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+                            <Comment author="srpalomino" body="sdafsdafasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+                        </div>
                     </div>
                 )}                
             </div>

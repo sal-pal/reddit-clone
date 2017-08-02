@@ -13,7 +13,7 @@ class Post extends Component {
             marginBottom: '1px',
             color: '#00F',
             textDecoration: 'none',
-            font: 'medium verdana,arial,helvetica,sans-serif'
+            font: '18px verdana,arial,helvetica,sans-serif'
             
         }
         
