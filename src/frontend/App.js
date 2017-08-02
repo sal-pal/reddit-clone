@@ -14,26 +14,7 @@ const getObjVals = require('../../helper-functions/getObjVals.js')
 class App extends Component {
     constructor(props) {
         super(props)
-        const allPosts = { 
-            '0': 
-                { title: 'ipsum maiores perspiciatis',
-                 author: 'consequatur est consequuntur',
-                 id: '597fadc7b702770f9181db58' },
-            '1': 
-                { title: 'dolorem nisi ut',
-                 author: 'aut dolorem neque',
-                 id: '597fadc7b702770f9181db5a' },
-            '2': 
-                { title: 'natus eligendi pariatur',
-                 author: 'quis qui soluta',
-                 id: '597fadc7b702770f9181db59' },
-            '3': 
-                { title: 'quibusdam quia eaque',
-                 author: 'consectetur perferendis ea',
-                 id: '597fadc7b702770f9181db5b' } 
-        }
-
-        this.state = {homePageRendered: true, postPageRendered: false, allPosts: allPosts, targetPost: "", postList: []}
+        this.state = {homePageRendered: true, postPageRendered: false, postObjects: "", targetPost: "", postList: []}
     }
     
     componentDidMount() {
@@ -53,15 +34,15 @@ class App extends Component {
                         titleHighlighted={true} 
                         onClick={this.clickHandler.bind(this)} 
                     />
-                
-                this.setState({postList: postList})
-                })  
+                })
+                this.setState({postList: postList, postObjects: posts})
             })
     }
     
     clickHandler(e) {
+        //Navigate to post page and render the post just clicked on
         const targetPostID = e.target.attributes.getNamedItem('id').value
-        const targetPost = findObjByKeyValPair(this.state.allPosts, ['id', targetPostID])
+        const targetPost = findObjByKeyValPair(this.state.postObjects, ['id', targetPostID])
         this.setState({targetPost: targetPost, homePageRendered: false, postPageRendered: true})
     }
     
@@ -90,27 +71,6 @@ class App extends Component {
             marginLeft: '150px',
             marginTop: '100px'
         }
-        
-        const allPosts = { 
-            '0': 
-                { title: 'ipsum maiores perspiciatis',
-                 author: 'consequatur est consequuntur',
-                 id: '597fadc7b702770f9181db58' },
-            '1': 
-                { title: 'dolorem nisi ut',
-                 author: 'aut dolorem neque',
-                 id: '597fadc7b702770f9181db5a' },
-            '2': 
-                { title: 'natus eligendi pariatur',
-                 author: 'quis qui soluta',
-                 id: '597fadc7b702770f9181db59' },
-            '3': 
-                { title: 'quibusdam quia eaque',
-                 author: 'consectetur perferendis ea',
-                 id: '597fadc7b702770f9181db5b' } 
-        }
-        
-        const posts = getObjVals(allPosts)
         
         return (
             <div className="App" style={bannerStyling}>
