@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import renderIf from 'render-if'
 
 
 class Post extends Component {
@@ -22,11 +23,17 @@ class Post extends Component {
             font: 'x-small verdana,arial,helvetica,sans-serif'  
         }
         
+        if (!this.props.titleHighlighted) {
+            //Make the title not become a link
+            titleStyling.color = 'black'
+            titleStyling.pointerEvents = 'none'
+        }
+        
         return (
             <div className="Post">
                 <a href="#" onClick={this.props.onClick} style={titleStyling} id={this.props.id}>
                     {this.props.title}
-                </a>
+                </a>   
                 <p style={authorStyling}>
                     Submitted by {this.props.author}
                 </p>

@@ -79,7 +79,7 @@ class App extends Component {
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal" onClick={this.clickHandler.bind(this)} id='597fadc7b702770f9181db58'/>
+                        <Post title="Title" author="SalPal" id='597fadc7b702770f9181db59' titleHighlighted={true} onClick={this.clickHandler.bind(this)} />
                     </div>  
                 )}
                 
