@@ -4,6 +4,7 @@ import renderIf from 'render-if'
 import reddit from './redditImg.png'
 const Post = require('./Post.js')
 const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
+const getObjVals = require('../../helper-functions/getObjVals.js')
 
 
     
@@ -74,12 +75,35 @@ class App extends Component {
             marginTop: '100px'
         }
         
+        const allPosts = { 
+            '0': 
+                { title: 'ipsum maiores perspiciatis',
+                 author: 'consequatur est consequuntur',
+                 id: '597fadc7b702770f9181db58' },
+            '1': 
+                { title: 'dolorem nisi ut',
+                 author: 'aut dolorem neque',
+                 id: '597fadc7b702770f9181db5a' },
+            '2': 
+                { title: 'natus eligendi pariatur',
+                 author: 'quis qui soluta',
+                 id: '597fadc7b702770f9181db59' },
+            '3': 
+                { title: 'quibusdam quia eaque',
+                 author: 'consectetur perferendis ea',
+                 id: '597fadc7b702770f9181db5b' } 
+        }
+        
+        const posts = getObjVals(allPosts)
+        
         return (
             <div className="App" style={bannerStyling}>
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <Post title="Title" author="SalPal" id='597fadc7b702770f9181db59' titleHighlighted={true} onClick={this.clickHandler.bind(this)} />
+                        {posts.map((post) => {
+                            return <Post title={post.title} author={post.author} id={post.id} titleHighlighted={true} onClick={this.clickHandler.bind(this)} />
+                        })}
                     </div>  
                 )}
                 
