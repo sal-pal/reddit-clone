@@ -41,6 +41,9 @@ class App extends Component {
         window.onpopstate = function () {
             this.setState({homePageRendered: true, postPageRendered: false})
         }.bind(this)
+        
+        const allPosts = fetch("http://localhost:5000/api/getAllPosts")
+        console.log(allPosts)
     }
     
     clickHandler(e) {
