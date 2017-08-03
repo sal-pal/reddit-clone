@@ -4,7 +4,7 @@ const app = express()
 const mongoose = require('mongoose')
 const router = require('./src/backend/controls/routes.js')
 
-const url = "mongodb://user1:password1@ds155091.mlab.com:55091/redditmock"  
+const url = "mongodb://user1:password1@ds143071.mlab.com:43071/redditclone"  
 mongoose.connect(url)
 
 

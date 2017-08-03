@@ -96,13 +96,13 @@ module.exports.getAllPosts = function (callback) {
 
 module.exports.getCommentsByPost = function (objectId, callback) {
     Comment.find({parent: objectId}, '-_id -__v', {lean: true}, (err, result) => {
-        if (err) throw err
-        if (result.length === 0) throw new Error('No comments found')
-        if (result.length === 1) return callback(result[0])
+        if (err)                   return callback(err) 
+        if (result.length === 0)   return callback(new Error('No comments found'))
+        if (result.length === 1)   return callback(null, result[0])
         
         
         const comments = convertArrToObj(result)
-        callback(comments)
+        callback(null, comments)
     })    
 }
 
