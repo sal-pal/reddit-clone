@@ -15,7 +15,7 @@ const getObjVals = require('../../helper-functions/getObjVals.js')
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = {homePageRendered: true, postPageRendered: false, postObjects: "", targetPost: "", postList: []}
+        this.state = {homePageRendered: true, postPageRendered: false, postObjects: "", targetPost: "", postList: [], commentList: []}
     }
     
     componentDidMount() {
@@ -45,6 +45,20 @@ class App extends Component {
         const targetPostID = e.target.attributes.getNamedItem('id').value
         const targetPost = findObjByKeyValPair(this.state.postObjects, ['id', targetPostID])
         this.setState({targetPost: targetPost, homePageRendered: false, postPageRendered: true})
+        
+        //Load all the comments associated with the post just clicked on
+        fetch("http://localhost:5000/api/getCommentsByPost/" + targetPostID)
+            .then(body => body.json())
+            .then(comments => {
+                console.log(comments)
+                const commentList = getObjVals(comments).map(comment => {
+                    return <Comment  
+                        author={comment.author} 
+                        body={comment.comment} 
+                    />
+                })
+                this.setState({commentList: commentList})
+            })
     }
     
     
@@ -103,9 +117,7 @@ class App extends Component {
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
                         <p style={commentHeader}> Comments </p>
                         <div style={commentContainerStyling}>
-                            <Comment author="srpalomino" body="sdafsdafasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
-                            <Comment author="srpalomino" body="sdafsdafasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
-                            <Comment author="srpalomino" body="sdafsdafasdfaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+                            {this.state.commentList}
                         </div>
                     </div>
                 )}                
