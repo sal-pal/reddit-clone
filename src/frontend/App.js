@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom'
 import renderIf from 'render-if'
 import reddit from './redditImg.png'
+    
 const Post = require('./Post.js')
 const Comment = require('./Comment.js')
+const Login = require('./Login.js')
+
 const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
 const getObjVals = require('../../helper-functions/getObjVals.js')
 
@@ -15,7 +18,16 @@ const getObjVals = require('../../helper-functions/getObjVals.js')
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = {homePageRendered: true, postPageRendered: false, commentContainerRendered: false, postObjects: "", targetPost: "", postList: [], commentList: [], commentHeader: 'No Comments'}
+        this.state = {homePageRendered: true, 
+                      postPageRendered: false, 
+                      postObjects: "", 
+                      targetPost: "", 
+                      postList: [], 
+                      commentList: [], 
+                      //Default state is to display no comments within the post page
+                      commentContainerRendered: false, 
+                      commentHeader: 'No Comments'
+        }
     }
     
     componentDidMount() {
@@ -106,18 +118,17 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
+                <Login loginFailed={true} />
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
                         {this.state.postList}
                     </div>  
                 )}
-                
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
-                        <p style={commentHeader}> {this.state.commentHeader} </p>
-                        
+                        <p style={commentHeader}> {this.state.commentHeader} </p>   
                         {renderIf(this.state.commentContainerRendered) (
                             <div style={commentContainerStyling}>
                                 {this.state.commentList}
