@@ -53,7 +53,7 @@ class Login extends Component {
                     <p style={errorMsgStyling}> Incorrect username or password </p>
                 )}
             
-                <button style={loginBttnStylying}> login </button>
+                <button style={loginBttnStylying} onClick={this.props.onSubmit}> login </button>
             </div>
         );
     }

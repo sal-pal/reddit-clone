@@ -26,7 +26,8 @@ class App extends Component {
                       commentList: [], 
                       //Default state is to display no comments within the post page
                       commentContainerRendered: false, 
-                      commentHeader: 'No Comments'
+                      commentHeader: 'No Comments',
+                      loginFailed: false
         }
     }
     
@@ -74,6 +75,10 @@ class App extends Component {
             })
     }
     
+    submitHandler() {
+        this.setState({loginFailed: true})
+    }
+    
     
     render() {
         const bannerStyling = {
@@ -118,7 +123,7 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
-                <Login loginFailed={true} />
+                <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)} />
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
