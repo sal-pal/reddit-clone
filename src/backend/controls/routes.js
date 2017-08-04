@@ -61,7 +61,7 @@ router.get('/getCommentsByPost/:parent', (req, res) => {
     const parent = req.params.parent
     db.getCommentsByPost(parent, (err, result) => {
         if (!err) return res.json(result)
-        if (err.message === 'No comments found') return res.status(400).send(err.message)
+        if (err.message === 'No comments found') return res.sendStatus(400)
         res.sendStatus(500)
     })
 })

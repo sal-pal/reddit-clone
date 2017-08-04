@@ -15,7 +15,7 @@ const getObjVals = require('../../helper-functions/getObjVals.js')
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = {homePageRendered: true, postPageRendered: false, postObjects: "", targetPost: "", postList: [], commentList: []}
+        this.state = {homePageRendered: true, postPageRendered: false, commentContainerRendered: false, postObjects: "", targetPost: "", postList: [], commentList: [], commentHeader: 'No Comments'}
     }
     
     componentDidMount() {
@@ -48,16 +48,17 @@ class App extends Component {
         
         //Load all the comments associated with the post just clicked on
         fetch("http://localhost:5000/api/getCommentsByPost/" + targetPostID)
-            .then(body => body.json())
+            .then(res => {
+                if (res.status === 200) return res.json()
+            })
             .then(comments => {
-                console.log(comments)
                 const commentList = getObjVals(comments).map(comment => {
                     return <Comment  
                         author={comment.author} 
                         body={comment.comment} 
                     />
                 })
-                this.setState({commentList: commentList})
+                this.setState({commentList: commentList, commentHeader: 'Comments', commentContainerRendered: true})
             })
     }
     
@@ -115,10 +116,13 @@ class App extends Component {
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
-                        <p style={commentHeader}> Comments </p>
-                        <div style={commentContainerStyling}>
-                            {this.state.commentList}
-                        </div>
+                        <p style={commentHeader}> {this.state.commentHeader} </p>
+                        
+                        {renderIf(this.state.commentContainerRendered) (
+                            <div style={commentContainerStyling}>
+                                {this.state.commentList}
+                            </div>                        
+                        )}
                     </div>
                 )}                
             </div>
