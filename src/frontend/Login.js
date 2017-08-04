@@ -5,6 +5,21 @@ const renderIf = require('render-if')
 class Login extends Component {
     constructor(props) {
         super(props)
+        this.state = {username: "", password: ""}
+    }
+    
+    clickHandler() {
+        this.props.onSubmit(this.state)
+    }
+    
+    updateUsername(e) {
+        const value = e.target.value
+        this.setState({username: value})
+    }
+    
+    updatePassword(e) {
+        const value = e.target.value
+        this.setState({password: value})
     }
 
     render() {        
@@ -46,14 +61,14 @@ class Login extends Component {
         
         return (
             <div className="container" style={containerStyling} >
-                <input type="text" placeholder="username" style={usernameStyling} />
-                <input type="password" placeholder="password" style={passwordStyling} />
+                <input type="text" placeholder="username" onChange={this.updateUsername.bind(this)} style={usernameStyling} />
+                <input type="password" placeholder="password" onChange={this.updatePassword.bind(this)} style={passwordStyling} />
                 
                 {renderIf(this.props.loginFailed) (
                     <p style={errorMsgStyling}> Incorrect username or password </p>
                 )}
             
-                <button style={loginBttnStylying} onClick={this.props.onSubmit}> login </button>
+                <button style={loginBttnStylying} onClick={this.clickHandler.bind(this)}> login </button>
             </div>
         );
     }

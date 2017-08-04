@@ -75,8 +75,8 @@ class App extends Component {
             })
     }
     
-    submitHandler() {
-        this.setState({loginFailed: true})
+    submitHandler(credentials) {
+        console.log(credentials)
     }
     
     
