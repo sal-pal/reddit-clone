@@ -75,8 +75,16 @@ class App extends Component {
             })
     }
     
-    submitHandler(credentials) {
-        console.log(credentials)
+    submitHandler(credentials) {     
+        const init = {
+            method: 'POST',
+            credentials: 'include',
+            headers: {contentType: 'application/x-www-form-urlencoded'},
+            body: 'username=user&password=password'
+        }
+        fetch("http://localhost:5000/api/login", init).then(res => {
+            console.log(res.status)
+        })
     }
     
     
