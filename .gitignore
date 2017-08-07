@@ -16,3 +16,4 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 mongoosePractice.js
+./src/frontend/assets/app.js
