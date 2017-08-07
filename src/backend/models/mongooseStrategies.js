@@ -102,7 +102,6 @@ mongooseStrategies.getCommentsByPost = function (objectId, callback) {
         if (result.length === 0)   return callback(new Error('No comments found'))
         if (result.length === 1)   return callback(null, result[0])
         
-        
         const comments = convertArrToObj(result)
         callback(null, comments)
     })   

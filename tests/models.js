@@ -73,7 +73,7 @@ describe('getCommentsByPost', () => {
     
     it('returns an object representing a single comment if only one comment associated with post', done => {
         const parent = singleComment.parent
-        getCommentsByPost(parent, results => {
+        getCommentsByPost(parent, (err, results) => {
             expect(results).to.eql(singleComment)
             done()
         })
@@ -81,11 +81,11 @@ describe('getCommentsByPost', () => {
     
     it('returns an object containing multiple comments asssociated with a post', done => {
         const parent = customAttrs[1]
-        getCommentsByPost(parent, result => {
+        getCommentsByPost(parent, (err, results) => {
             //Getting our comments in a form that allows us to test for equality
             const commentsArr = getObjVals(multipleComments)
             const sortedCommentsArr = sortByProp(commentsArr, 'comment')
-            const resultArr = getObjVals(result)
+            const resultArr = getObjVals(results)
             const sortedResultArr = sortByProp(resultArr, 'comment')
             
             expect(sortedResultArr).to.eql(sortedCommentsArr)
