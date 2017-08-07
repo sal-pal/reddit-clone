@@ -6,6 +6,7 @@ import reddit from './redditImg.png'
 const Post = require('./Post.js')
 const Comment = require('./Comment.js')
 const Login = require('./Login.js')
+const Signup = require('./Signup.js')
 
 const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
 const getObjVals = require('../../helper-functions/getObjVals.js')
@@ -137,8 +138,16 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
+                <Signup />
                 {renderIf(!this.state.loggedIn) (
-                    <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)} />
+                    <div>
+                        <span> 
+                            Want to join?
+                            <a> Signup </a>
+                            in seconds
+                        </span>
+                        <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)}/>
+                    </div>
                 )}
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
