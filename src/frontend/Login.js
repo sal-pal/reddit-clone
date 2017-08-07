@@ -26,6 +26,7 @@ class Login extends Component {
         
         const containerStyling = {
             border: '1px solid #999',
+            backgroundColor: '#F8FBFD',
             position: 'absolute',
             right: '.25%',
             top: '65px',
