@@ -9,6 +9,7 @@ const Login = require('./Login.js')
 
 const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
 const getObjVals = require('../../helper-functions/getObjVals.js')
+const request = require('superagent')
 
 
     
@@ -76,15 +77,13 @@ class App extends Component {
     }
     
     submitHandler(credentials) {     
-        const init = {
-            method: 'POST',
-            credentials: 'include',
-            headers: {contentType: 'application/x-www-form-urlencoded'},
-            body: 'username=user&password=password'
-        }
-        fetch("http://localhost:5000/api/login", init).then(res => {
-            console.log(res.status)
-        })
+        request
+            .post("http://localhost:5000/api/login")
+            .send('username=' + credentials.username)
+            .send('password=' + credentials.password)
+            .then(function(err, res) {
+                console.log(res.status)
+            })
     }
     
     
