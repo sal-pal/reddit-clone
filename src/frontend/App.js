@@ -23,7 +23,7 @@ class App extends Component {
         this.state = {homePageRendered: true, 
                       postPageRendered: false,
                       signupRendered: false,
-                      loginRendered: false,
+                      loginRendered: true,
                       postObjects: "", 
                       targetPost: "", 
                       postList: [], 
@@ -116,6 +116,23 @@ class App extends Component {
             left: '160px'
         }
         
+        const signupMsgContainerStyling = {
+            position: 'absolute',
+            right: '0px',
+            bottom: '0px',
+            backgroundColor: '#EFF7FF',
+            padding: '4px',
+            lineHeight: '12px',
+            borderTopLeftRadius: '7px',
+            color: '#808080',
+            font: 'small verdana',
+        }
+        
+        const signupLinkStyling = {
+            font: 'small verdana',
+            textDecoration: 'none'
+        }
+        
         const wrapperStyling = {
             marginLeft: '150px',
             marginTop: '100px'
@@ -139,16 +156,20 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
-                <Signup />
                 {renderIf(this.state.loginRendered) (
                     <div>
-                        <span> 
+                        <span style={signupMsgContainerStyling}> 
                             Want to join?
-                            <a> Signup </a>
+                            <a href="#" style={signupLinkStyling} onClick={() => this.setState({signupRendered: true, loginRendered: false})}> 
+                                Signup 
+                            </a>
                             in seconds
                         </span>
                         <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)}/>
                     </div>
+                )}
+                {renderIf(this.state.signupRendered) (
+                    <Signup />
                 )}
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
