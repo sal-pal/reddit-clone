@@ -28,7 +28,8 @@ class App extends Component {
                       //Default state is to display no comments within the post page
                       commentContainerRendered: false, 
                       commentHeader: 'No Comments',
-                      loginFailed: false
+                      loginFailed: false,
+                      loggedIn: false
         }
     }
     
@@ -77,13 +78,19 @@ class App extends Component {
     }
     
     submitHandler(credentials) {     
+        const callback = function (err, res) {
+            if (err) {
+                if (err.message === 'Bad Request') return this.setState({loginFailed: true})
+                else return alert('Sorry, an error occured with the server')
+             } 
+            if (res.status == 200) return this.setState({loggedIn: true})
+        }
+        
         request
             .post("http://localhost:5000/api/login")
             .send('username=' + credentials.username)
             .send('password=' + credentials.password)
-            .then(function(err, res) {
-                console.log(res.status)
-            })
+            .end(callback.bind(this))
     }
     
     
@@ -130,7 +137,9 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
-                <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)} />
+                {renderIf(!this.state.loggedIn) (
+                    <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)} />
+                )}
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
