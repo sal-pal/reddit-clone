@@ -21,7 +21,9 @@ class App extends Component {
     constructor(props) {
         super(props)
         this.state = {homePageRendered: true, 
-                      postPageRendered: false, 
+                      postPageRendered: false,
+                      signupRendered: false,
+                      loginRendered: false,
                       postObjects: "", 
                       targetPost: "", 
                       postList: [], 
@@ -29,8 +31,7 @@ class App extends Component {
                       //Default state is to display no comments within the post page
                       commentContainerRendered: false, 
                       commentHeader: 'No Comments',
-                      loginFailed: false,
-                      loggedIn: false
+                      loginFailed: false
         }
     }
     
@@ -139,7 +140,7 @@ class App extends Component {
         return (
             <div className="App" style={bannerStyling}>
                 <Signup />
-                {renderIf(!this.state.loggedIn) (
+                {renderIf(this.state.loginRendered) (
                     <div>
                         <span> 
                             Want to join?
