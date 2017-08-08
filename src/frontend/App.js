@@ -30,7 +30,8 @@ class App extends Component {
                       commentList: [], 
                       commentContainerRendered: false, 
                       commentHeader: 'No Comments',
-                      activeUser: ""
+                      activeUser: "",
+                      commentSubmissionText: ""
         }
     }
     
@@ -121,6 +122,15 @@ class App extends Component {
             .send('username=' + username)
             .send('password=' + password)
             .end(callback.bind(this))
+    }
+    
+    commentTextChangeHandler(e) {
+        const text = e.target.value
+        this.setState({commentSubmissionText: text})
+    }
+    
+    commentSubmissionHandler() {
+        console.log(this.state.commentSubmissionText)
     }
     
     
@@ -227,8 +237,8 @@ class App extends Component {
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
                         <p style={commentHeader}> {this.state.commentHeader} </p>
                     
-                        <textarea style={commentTextBoxStyling} /> 
-                        <button style={commentSubmissionBttnStyling}> save </button>
+                        <textarea style={commentTextBoxStyling} onChange={this.commentTextChangeHandler.bind(this)}/> 
+                        <button style={commentSubmissionBttnStyling} onClick={this.commentSubmissionHandler.bind(this)}> save </button>
                     
                         {renderIf(this.state.commentContainerRendered) (
                             <div style={commentContainerStyling}>
