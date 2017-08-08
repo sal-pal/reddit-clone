@@ -40,23 +40,26 @@ class App extends Component {
             this.setState({homePageRendered: true, postPageRendered: false})
         }.bind(this)
         
-        fetch("http://localhost:5000/api/getAllPosts")
-            .then(body => body.json())
-            .then(posts => {
-                const postList = getObjVals(posts).map(post => {
-                    return <Post 
-                        title={post.title} 
-                        author={post.author} 
-                        id={post.id} 
-                        titleHighlighted={true} 
-                        onClick={this.clickHandler.bind(this)} 
-                    />
-                })
-                this.setState({postList: postList, postObjects: posts})
+        const preparePostList = function(err, res) {
+            const posts = getObjVals(res.body)
+            const postList = posts.map(post => {
+                return <Post 
+                    title={post.title} 
+                    author={post.author} 
+                    id={post.id} 
+                    titleHighlighted={true} 
+                    onClick={this.clickPostHandler.bind(this)} 
+                />
             })
+            this.setState({postList: postList, postObjects: res.body})
+        }
+        
+        request
+            .get("http://localhost:5000/api/getAllPosts")
+            .end(preparePostList.bind(this))
     }
     
-    clickHandler(e) {
+    clickPostHandler(e) {
         //Navigate to post page and render the post just clicked on
         const targetPostID = e.target.attributes.getNamedItem('id').value
         const targetPost = findObjByKeyValPair(this.state.postObjects, ['id', targetPostID])
@@ -78,7 +81,7 @@ class App extends Component {
             })
     }
     
-    submitHandler(credentials) {     
+    loginRequestHandler(credentials) {     
         const callback = function (err, res) {
             if (err) {
                 if (err.message === 'Bad Request') return alert('Incorrect username or password')
@@ -190,7 +193,7 @@ class App extends Component {
                             </a>
                             &nbsp;in seconds
                         </span>
-                        <Login onSubmit={this.submitHandler.bind(this)}/>
+                        <Login onSubmit={this.loginRequestHandler.bind(this)}/>
                     </div>
                 )}
                 
