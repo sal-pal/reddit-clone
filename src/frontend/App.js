@@ -130,7 +130,29 @@ class App extends Component {
     }
     
     commentSubmissionHandler() {
-        console.log(this.state.commentSubmissionText)
+        if (!this.state.activeUser) return alert('Please signup or login before making comments')
+        const comment = {
+            author: this.state.activeUser,
+            parent: this.state.targetPost.id,
+            comment: this.state.commentSubmissionText
+        }
+        
+        const callback = function(err, res) {
+            if (res.status == 200) {
+                const commentComp = <Comment  
+                    author={comment.author} 
+                    body={comment.comment} 
+                />
+                const commentList = this.state.commentList
+                commentList.unshift(commentComp)
+                this.setState({commentList: commentList})
+            }
+        }
+        
+        request
+            .post("http://localhost:5000/api/insertComment")
+            .send(comment)
+            .end(callback.bind(this))
     }
     
     
