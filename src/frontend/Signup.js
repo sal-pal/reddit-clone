@@ -5,9 +5,24 @@ const renderIf = require('render-if')
 class Signup extends Component {
     constructor(props) {
         super(props)
-        this.state = {username: "", password: ""}
+        this.state = {username: "", password: "", verifyPassword: ""}
     }
 
+    updateUsername(e) {
+        const value = e.target.value
+        this.setState({username: value})
+    }
+    
+    updatePassword(e) {
+        const value = e.target.value
+        this.setState({password: value})
+    }
+    
+    updateVerifyPassword(e) {
+        const value = e.target.value
+        this.setState({verifyPassword: value})
+    }
+    
     render() {        
         
         const containerStyling = {
@@ -50,10 +65,10 @@ class Signup extends Component {
         
         return (
             <div className="container" style={containerStyling}>
-                <input type="text" placeholder="choose a username" style={usernameStyling}/>
-                <input type="password" placeholder="password" style={passwordStyling}/>
-                <input type="password" placeholder="verify password" style={passwordStyling}/>
-                <button type="submit" style={signupBttnStylying}> signup </button>
+                <input type="text" placeholder="choose a username" style={usernameStyling} onChange={this.updateUsername.bind(this)}/>
+                <input type="password" placeholder="password" style={passwordStyling} onChange={this.updatePassword.bind(this)}/>
+                <input type="password" placeholder="verify password" style={passwordStyling} onChange={this.updateVerifyPassword.bind(this)}/>
+                <button type="submit" style={signupBttnStylying} onClick={() => this.props.onSignupRequest(this.state)}> signup </button>
             </div>
         );
     }

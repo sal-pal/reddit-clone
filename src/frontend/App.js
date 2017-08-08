@@ -31,7 +31,8 @@ class App extends Component {
                       //Default state is to display no comments within the post page
                       commentContainerRendered: false, 
                       commentHeader: 'No Comments',
-                      loginFailed: false
+                      loginFailed: false,
+                      activeUser: ""
         }
     }
     
@@ -83,15 +84,41 @@ class App extends Component {
         const callback = function (err, res) {
             if (err) {
                 if (err.message === 'Bad Request') return this.setState({loginFailed: true})
-                else return alert('Sorry, an error occured with the server')
-             } 
-            if (res.status == 200) return this.setState({loggedIn: true})
+                return alert('Sorry, an error occured with the server')
+            } 
+            const username = credentials.username
+            if (res.status == 200) this.setState({loginRendered: false, activeUser: username})
         }
         
         request
             .post("http://localhost:5000/api/login")
             .send('username=' + credentials.username)
             .send('password=' + credentials.password)
+            .end(callback.bind(this))
+    }
+    
+    signupRequestHandler (credentials) {
+        const username = credentials.username
+        const password = credentials.password
+        const verifyPassword = credentials.verifyPassword
+        
+        if (password !== verifyPassword) {
+            return alert('Passwords do not match')
+        }
+        
+        
+        const callback = function (err, res) {
+            if (err) {
+                if (err.message === 'Bad Request') return alert('Username is already in use')
+                return alert('Sorry, an error occured with the server')
+             } 
+            if (res.status == 200) this.setState({signupRendered: false, activeUser: username})
+        }
+        
+        request
+            .post("http://localhost:5000/api/signup")
+            .send('username=' + username)
+            .send('password=' + password)
             .end(callback.bind(this))
     }
     
@@ -169,7 +196,7 @@ class App extends Component {
                     </div>
                 )}
                 {renderIf(this.state.signupRendered) (
-                    <Signup />
+                    <Signup onSignupRequest={this.signupRequestHandler.bind(this)} />
                 )}
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 {renderIf(this.state.homePageRendered) (
