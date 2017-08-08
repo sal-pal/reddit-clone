@@ -64,11 +64,6 @@ class Login extends Component {
             <div className="container" style={containerStyling} >
                 <input type="text" placeholder="username" onChange={this.updateUsername.bind(this)} style={usernameStyling} />
                 <input type="password" placeholder="password" onChange={this.updatePassword.bind(this)} style={passwordStyling} />
-                
-                {renderIf(this.props.loginFailed) (
-                    <p style={errorMsgStyling}> Incorrect username or password </p>
-                )}
-            
                 <button style={loginBttnStylying} onClick={this.clickHandler.bind(this)}> login </button>
             </div>
         );

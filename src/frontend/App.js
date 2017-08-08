@@ -28,10 +28,8 @@ class App extends Component {
                       targetPost: "", 
                       postList: [], 
                       commentList: [], 
-                      //Default state is to display no comments within the post page
                       commentContainerRendered: false, 
                       commentHeader: 'No Comments',
-                      loginFailed: false,
                       activeUser: ""
         }
     }
@@ -83,7 +81,7 @@ class App extends Component {
     submitHandler(credentials) {     
         const callback = function (err, res) {
             if (err) {
-                if (err.message === 'Bad Request') return this.setState({loginFailed: true})
+                if (err.message === 'Bad Request') return alert('Incorrect username or password')
                 return alert('Sorry, an error occured with the server')
             } 
             const username = credentials.username
@@ -192,18 +190,22 @@ class App extends Component {
                             </a>
                             &nbsp;in seconds
                         </span>
-                        <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)}/>
+                        <Login onSubmit={this.submitHandler.bind(this)}/>
                     </div>
                 )}
+                
                 {renderIf(this.state.signupRendered) (
                     <Signup onSignupRequest={this.signupRequestHandler.bind(this)} />
                 )}
+                
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
+                
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
                         {this.state.postList}
                     </div>  
                 )}
+                
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
