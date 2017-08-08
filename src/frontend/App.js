@@ -182,6 +182,19 @@ class App extends Component {
             borderRadius: '5'
         }
         
+        const commentTextBoxStyling = {
+            width: '500px',
+            height: '100px',
+            marginLeft: '1%'
+        }
+        
+        const commentSubmissionBttnStyling = {
+            display: 'block',
+            marginLeft: '1%',
+            marginBottom: '1%',
+            marginTop: '.5%'
+        }
+        
         return (
             <div className="App" style={bannerStyling}>
                 {renderIf(this.state.loginRendered) (
@@ -212,7 +225,11 @@ class App extends Component {
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
-                        <p style={commentHeader}> {this.state.commentHeader} </p>   
+                        <p style={commentHeader}> {this.state.commentHeader} </p>
+                    
+                        <textarea style={commentTextBoxStyling} /> 
+                        <button style={commentSubmissionBttnStyling}> save </button>
+                    
                         {renderIf(this.state.commentContainerRendered) (
                             <div style={commentContainerStyling}>
                                 {this.state.commentList}
