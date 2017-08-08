@@ -159,11 +159,11 @@ class App extends Component {
                 {renderIf(this.state.loginRendered) (
                     <div>
                         <span style={signupMsgContainerStyling}> 
-                            Want to join?
+                            Want to join?&nbsp;
                             <a href="#" style={signupLinkStyling} onClick={() => this.setState({signupRendered: true, loginRendered: false})}> 
                                 Signup 
                             </a>
-                            in seconds
+                            &nbsp;in seconds
                         </span>
                         <Login loginFailed={this.state.loginFailed} onSubmit={this.submitHandler.bind(this)}/>
                     </div>
