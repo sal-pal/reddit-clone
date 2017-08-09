@@ -38,7 +38,7 @@ class App extends Component {
     componentDidMount() {
         //Enables navigating back to home page from post page
         window.onpopstate = function () {
-            this.setState({homePageRendered: true, postPageRendered: false, commentList: []})
+            this.setState({homePageRendered: true, postPageRendered: false, commentList: [], commentContainerRendered: false})
         }.bind(this)
         
         const preparePostList = function(err, res) {
@@ -71,8 +71,16 @@ class App extends Component {
             .then(res => {
                 if (res.status === 200) return res.json()
             })
-            .then(comments => {
-                const commentList = getObjVals(comments).map(comment => {
+            .then(resBody => {
+                try {let comments = getObjVals(resBody)}
+                catch(err) {
+                    const haveOneComment = (err.message === "All values of the input object need to be Object() instances")
+                    if (haveOneComment) {
+                        
+                    }
+                }
+                console.log(comments)
+                const commentList = comments.map(comment => {
                     return <Comment  
                         author={comment.author} 
                         body={comment.comment} 
@@ -145,9 +153,11 @@ class App extends Component {
                 />
                 const commentList = this.state.commentList
                 commentList.unshift(commentComp)
-                this.setState({commentList: commentList})
+                this.setState({commentList: commentList, commentContainerRendered: true})
             }
         }
+        
+        
         
         request
             .post("http://localhost:5000/api/insertComment")
