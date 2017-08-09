@@ -31,9 +31,11 @@ class App extends Component {
                       commentContainerRendered: false, 
                       commentHeader: 'No Comments',
                       activeUser: "",
-                      commentSubmissionText: ""
+                      commentSubmissionText: "",
+                      postSubmitText: ""
         }
     }
+
     
     componentDidMount() {
         //Enables navigating back to home page from post page
@@ -148,11 +150,49 @@ class App extends Component {
     
     commentSubmissionHandler() {
         if (!this.state.activeUser) return alert('Please signup or login before making comments')
+        if (!this.state.commentSubmissionText) return alert('Comment needs to contain text')
+        
         const comment = {
             author: this.state.activeUser,
             parent: this.state.targetPost.id,
             comment: this.state.commentSubmissionText
         }
+        
+        const callback = function(err, res) {
+            if (res.status == 200) {
+                const commentComp = <Comment  
+                    author={comment.author} 
+                    body={comment.comment} 
+                />
+                const commentList = this.state.commentList
+                commentList.unshift(commentComp)
+                this.setState({commentList: commentList, commentContainerRendered: true})
+            }
+        }
+        
+        
+        
+        request
+            .post("http://localhost:5000/api/insertComment")
+            .send(comment)
+            .end(callback.bind(this))
+    }
+    
+    postTxtChngeHandler(e) {
+        const text = e.target.value
+        this.setState({postSubmitText: text})
+    }
+    
+    postSubmitHandler() {
+        if (!this.state.activeUser) return alert('Please signup or login before making posts')
+        if (!this.state.postSubmitText) return alert('Post needs to contain text')
+        
+        const post = {
+            title: this.state.postSubmitText,
+            author: this.state.activeUser
+        }
+        
+        console.log(post)
         
         const callback = function(err, res) {
             if (res.status == 200) {
@@ -280,8 +320,8 @@ class App extends Component {
                 
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <textarea style={postTxtBoxStyling}/> 
-                        <button style={postSubmitBttnStyling}> submit post </button>
+                        <textarea style={postTxtBoxStyling} onChange={this.postTxtChngeHandler.bind(this)}/> 
+                        <button style={postSubmitBttnStyling} onClick={this.postSubmitHandler.bind(this)}> submit post </button>
                         {this.state.postList}
                     </div>  
                 )}
