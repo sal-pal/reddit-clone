@@ -69,8 +69,21 @@ class App extends Component {
         //Load all the comments associated with the post just clicked on
         const loadComments = function (err, res) {
             if (res.status === 200) {
+                
                 const resBody = res.body
-                let comments = getObjVals(resBody)
+                try {getObjVals(resBody)}
+                catch(err) {
+                    const haveOneComment = (err.message === "All values of the input object need to be Object() instances")
+                    if (haveOneComment) {
+                        const comment = res.body
+                        const commentComp = <Comment  
+                            author={comment.author} 
+                            body={comment.comment} 
+                        />
+                        this.setState({commentList: [commentComp], commentHeader: 'Comments', commentContainerRendered: true})
+                    }
+                }
+                const comments = getObjVals(resBody)
                 const commentList = comments.map(comment => {
                     return <Comment  
                         author={comment.author} 
