@@ -246,6 +246,17 @@ class App extends Component {
             marginTop: '.5%'
         }
         
+        const postTxtBoxStyling = {
+            width: '220px',
+            height: '40px'       
+        }
+        
+        const postSubmitBttnStyling = {
+            display: 'block',
+            marginBottom: '3%',
+            marginTop: '.5%'
+        }
+        
         return (
             <div className="App" style={bannerStyling}>
                 {renderIf(this.state.loginRendered) (
@@ -269,6 +280,8 @@ class App extends Component {
                 
                 {renderIf(this.state.homePageRendered) (
                     <div className="postWrapper" style={wrapperStyling}>       
+                        <textarea style={postTxtBoxStyling}/> 
+                        <button style={postSubmitBttnStyling}> submit post </button>
                         {this.state.postList}
                     </div>  
                 )}
