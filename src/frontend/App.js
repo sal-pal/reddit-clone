@@ -29,7 +29,6 @@ class App extends Component {
                       postList: [], 
                       commentList: [], 
                       commentContainerRendered: false, 
-                      commentHeader: 'No Comments',
                       activeUser: "",
                       commentSubmissionText: "",
                       postSubmitText: ""
@@ -82,7 +81,7 @@ class App extends Component {
                             author={comment.author} 
                             body={comment.comment} 
                         />
-                        this.setState({commentList: [commentComp], commentHeader: 'Comments', commentContainerRendered: true})
+                        return this.setState({commentList: [commentComp], commentContainerRendered: true})
                     }
                 }
                 const comments = getObjVals(resBody)
@@ -92,8 +91,8 @@ class App extends Component {
                         body={comment.comment} 
                     />
                 })
-                this.setState({commentList: commentList, commentHeader: 'Comments', commentContainerRendered: true})
-            }
+                return this.setState({commentList: commentList, commentContainerRendered: true})
+            }    
         }            
           
         request
@@ -108,7 +107,9 @@ class App extends Component {
                 return alert('Sorry, an error occured with the server')
             } 
             const username = credentials.username
-            if (res.status == 200) this.setState({loginRendered: false, activeUser: username})
+            const thnkYouMsg = () => alert('Thank you for logging in!')
+            const newStateData = {loginRendered: false, activeUser: username}
+            if (res.status == 200) this.setState(newStateData, thnkYouMsg)
         }
         
         request
@@ -132,8 +133,10 @@ class App extends Component {
             if (err) {
                 if (err.message === 'Bad Request') return alert('Username is already in use')
                 return alert('Sorry, an error occured with the server')
-             } 
-            if (res.status == 200) this.setState({signupRendered: false, activeUser: username})
+            } 
+            const thnkYouMsg = () => alert('Thank you for signing up!')
+            const newStateData = {signupRendered: false, activeUser: username}
+            if (res.status == 200) this.setState(newStateData, thnkYouMsg)
         }
         
         request
@@ -329,7 +332,7 @@ class App extends Component {
                 {renderIf(this.state.postPageRendered) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
-                        <p style={commentHeader}> {this.state.commentHeader} </p>
+                        <p style={commentHeader}> Comments </p>
                     
                         <textarea style={commentTextBoxStyling} onChange={this.commentTextChangeHandler.bind(this)}/> 
                         <button style={commentSubmissionBttnStyling} onClick={this.commentSubmissionHandler.bind(this)}> save </button>
