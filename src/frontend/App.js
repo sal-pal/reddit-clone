@@ -38,7 +38,7 @@ class App extends Component {
     componentDidMount() {
         //Enables navigating back to home page from post page
         window.onpopstate = function () {
-            this.setState({homePageRendered: true, postPageRendered: false})
+            this.setState({homePageRendered: true, postPageRendered: false, commentList: []})
         }.bind(this)
         
         const preparePostList = function(err, res) {
