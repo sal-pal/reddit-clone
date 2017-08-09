@@ -191,27 +191,27 @@ class App extends Component {
             title: this.state.postSubmitText,
             author: this.state.activeUser
         }
-        
-        console.log(post)
-        
-        const callback = function(err, res) {
+      
+        const loadPost = function(err, res) {
             if (res.status == 200) {
-                const commentComp = <Comment  
-                    author={comment.author} 
-                    body={comment.comment} 
+                const postComp = <Post  
+                    title={post.title}
+                    author={post.author}
+                    titleHighlighted={true}
+                    onClick={this.clickPostHandler.bind(this)} 
                 />
-                const commentList = this.state.commentList
-                commentList.unshift(commentComp)
-                this.setState({commentList: commentList, commentContainerRendered: true})
+                const postList = this.state.postList
+                postList.unshift(postComp)
+                this.setState({postList: postList})
             }
         }
         
         
         
         request
-            .post("http://localhost:5000/api/insertComment")
-            .send(comment)
-            .end(callback.bind(this))
+            .post("http://localhost:5000/api/insertPost")
+            .send(post)
+            .end(loadPost.bind(this))
     }
     
     
