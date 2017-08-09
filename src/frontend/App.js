@@ -67,19 +67,10 @@ class App extends Component {
         this.setState({targetPost: targetPost, homePageRendered: false, postPageRendered: true})
         
         //Load all the comments associated with the post just clicked on
-        fetch("http://localhost:5000/api/getCommentsByPost/" + targetPostID)
-            .then(res => {
-                if (res.status === 200) return res.json()
-            })
-            .then(resBody => {
-                try {let comments = getObjVals(resBody)}
-                catch(err) {
-                    const haveOneComment = (err.message === "All values of the input object need to be Object() instances")
-                    if (haveOneComment) {
-                        
-                    }
-                }
-                console.log(comments)
+        const loadComments = function (err, res) {
+            if (res.status === 200) {
+                const resBody = res.body
+                let comments = getObjVals(resBody)
                 const commentList = comments.map(comment => {
                     return <Comment  
                         author={comment.author} 
@@ -87,7 +78,12 @@ class App extends Component {
                     />
                 })
                 this.setState({commentList: commentList, commentHeader: 'Comments', commentContainerRendered: true})
-            })
+            }
+        }            
+          
+        request
+            .get("http://localhost:5000/api/getCommentsByPost/" + targetPostID)
+            .end(loadComments.bind(this))
     }
     
     loginRequestHandler(credentials) {     
