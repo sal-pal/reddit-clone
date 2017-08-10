@@ -37,11 +37,6 @@ class App extends Component {
 
     
     componentDidMount() {
-        //Enables navigating back to home page from post page
-        window.onpopstate = function () {
-            this.setState({homePgRndrd: true, postPgRndrd: false, comntList: [], comntCntrRndrd: false})
-        }.bind(this)
-        
         const preparePostList = function(err, res) {
             const posts = getObjVals(res.body)
             const postList = posts.map(post => {
@@ -215,6 +210,10 @@ class App extends Component {
             .end(loadPost.bind(this))
     }
     
+    backBttnClickHndlr() {
+        this.setState({homePgRndrd: true, postPgRndrd: false, comntList: [], comntCntrRndrd: false})
+    }
+    
     
     render() {
         const bannerStyling = {
@@ -298,6 +297,12 @@ class App extends Component {
             marginTop: '.5%'
         }
         
+        const backBttnStyling = {
+            position: 'absolute',
+            top: '75px',
+            left: '165px'
+        }
+        
         return (
             <div className="App" style={bannerStyling}>
                 {renderIf(this.state.loginRndrd) (
@@ -329,6 +334,7 @@ class App extends Component {
                 
                 {renderIf(this.state.postPgRndrd) (
                     <div className="postPage" style={wrapperStyling}> 
+                        <button style={backBttnStyling} onClick={this.backBttnClickHndlr.bind(this)}> Back </button>
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
                         <p style={comntHeader}> Comments </p>
                     
