@@ -20,18 +20,18 @@ const request = require('superagent')
 class App extends Component {
     constructor(props) {
         super(props)
-        this.state = {homePageRendered: true, 
-                      postPageRendered: false,
-                      signupRendered: false,
-                      loginRendered: true,
+        this.state = {homePgRndrd: true, 
+                      postPgRndrd: false,
+                      signupRndrd: false,
+                      loginRndrd: true,
                       postObjects: "", 
                       targetPost: "", 
                       postList: [], 
-                      commentList: [], 
-                      commentContainerRendered: false, 
+                      comntList: [], 
+                      comntCntnrRndrd: false, 
                       activeUser: "",
-                      commentSubmissionText: "",
-                      postSubmitText: ""
+                      comntSubmitTxt: "",
+                      postSubmitTxt: ""
         }
     }
 
@@ -39,7 +39,7 @@ class App extends Component {
     componentDidMount() {
         //Enables navigating back to home page from post page
         window.onpopstate = function () {
-            this.setState({homePageRendered: true, postPageRendered: false, commentList: [], commentContainerRendered: false})
+            this.setState({homePgRndrd: true, postPgRndrd: false, commentList: [], comntCntrRndrd: false})
         }.bind(this)
         
         const preparePostList = function(err, res) {
@@ -50,7 +50,7 @@ class App extends Component {
                     author={post.author} 
                     id={post.id} 
                     titleHighlighted={true} 
-                    onClick={this.clickPostHandler.bind(this)} 
+                    onClick={this.clickPostHndlr.bind(this)} 
                 />
             })
             this.setState({postList: postList, postObjects: res.body})
@@ -61,11 +61,11 @@ class App extends Component {
             .end(preparePostList.bind(this))
     }
     
-    clickPostHandler(e) {
+    clickPostHndlr(e) {
         //Navigate to post page and render the post just clicked on
         const targetPostID = e.target.attributes.getNamedItem('id').value
         const targetPost = findObjByKeyValPair(this.state.postObjects, ['id', targetPostID])
-        this.setState({targetPost: targetPost, homePageRendered: false, postPageRendered: true})
+        this.setState({targetPost: targetPost, homePgRndrd: false, postPgRndrd: true})
         
         //Load all the comments associated with the post just clicked on
         const loadComments = function (err, res) {
@@ -81,7 +81,7 @@ class App extends Component {
                             author={comment.author} 
                             body={comment.comment} 
                         />
-                        return this.setState({commentList: [commentComp], commentContainerRendered: true})
+                        return this.setState({commentList: [commentComp], comntCntrRndrd: true})
                     }
                 }
                 const comments = getObjVals(resBody)
@@ -91,7 +91,7 @@ class App extends Component {
                         body={comment.comment} 
                     />
                 })
-                return this.setState({commentList: commentList, commentContainerRendered: true})
+                return this.setState({commentList: commentList, comntCntrRndrd: true})
             }    
         }            
           
@@ -100,7 +100,7 @@ class App extends Component {
             .end(loadComments.bind(this))
     }
     
-    loginRequestHandler(credentials) {     
+    loginReqHndlr(credentials) {     
         const callback = function (err, res) {
             if (err) {
                 if (err.message === 'Bad Request') return alert('Incorrect username or password')
@@ -108,7 +108,7 @@ class App extends Component {
             } 
             const username = credentials.username
             const thnkYouMsg = () => alert('Thank you for logging in!')
-            const newStateData = {loginRendered: false, activeUser: username}
+            const newStateData = {loginRndrd: false, activeUser: username}
             if (res.status == 200) this.setState(newStateData, thnkYouMsg)
         }
         
@@ -119,7 +119,7 @@ class App extends Component {
             .end(callback.bind(this))
     }
     
-    signupRequestHandler (credentials) {
+    signupReqHndlr(credentials) {
         const username = credentials.username
         const password = credentials.password
         const verifyPassword = credentials.verifyPassword
@@ -135,7 +135,7 @@ class App extends Component {
                 return alert('Sorry, an error occured with the server')
             } 
             const thnkYouMsg = () => alert('Thank you for signing up!')
-            const newStateData = {signupRendered: false, activeUser: username}
+            const newStateData = {signupRndrd: false, activeUser: username}
             if (res.status == 200) this.setState(newStateData, thnkYouMsg)
         }
         
@@ -146,19 +146,19 @@ class App extends Component {
             .end(callback.bind(this))
     }
     
-    commentTextChangeHandler(e) {
+    comntTxtChngeHndlr(e) {
         const text = e.target.value
-        this.setState({commentSubmissionText: text})
+        this.setState({comntSubmitTxt: text})
     }
     
-    commentSubmissionHandler() {
+    comntSubmitHndlr() {
         if (!this.state.activeUser) return alert('Please signup or login before making comments')
-        if (!this.state.commentSubmissionText) return alert('Comment needs to contain text')
+        if (!this.state.comntSubmitTxt) return alert('Comment needs to contain text')
         
         const comment = {
             author: this.state.activeUser,
             parent: this.state.targetPost.id,
-            comment: this.state.commentSubmissionText
+            comment: this.state.comntSubmitTxt
         }
         
         const callback = function(err, res) {
@@ -169,7 +169,7 @@ class App extends Component {
                 />
                 const commentList = this.state.commentList
                 commentList.unshift(commentComp)
-                this.setState({commentList: commentList, commentContainerRendered: true})
+                this.setState({commentList: commentList, comntCntrRndrd: true})
             }
         }
         
@@ -181,17 +181,17 @@ class App extends Component {
             .end(callback.bind(this))
     }
     
-    postTxtChngeHandler(e) {
+    postTxtChngeHndlr(e) {
         const text = e.target.value
-        this.setState({postSubmitText: text})
+        this.setState({postSubmitTxt: text})
     }
     
-    postSubmitHandler() {
+    postSubmitHndlr() {
         if (!this.state.activeUser) return alert('Please signup or login before making posts')
-        if (!this.state.postSubmitText) return alert('Post needs to contain text')
+        if (!this.state.postSubmitTxt) return alert('Post needs to contain text')
         
         const post = {
-            title: this.state.postSubmitText,
+            title: this.state.postSubmitTxt,
             author: this.state.activeUser
         }
       
@@ -201,7 +201,7 @@ class App extends Component {
                     title={post.title}
                     author={post.author}
                     titleHighlighted={true}
-                    onClick={this.clickPostHandler.bind(this)} 
+                    onClick={this.clickPostHndlr.bind(this)} 
                 />
                 const postList = this.state.postList
                 postList.unshift(postComp)
@@ -302,42 +302,42 @@ class App extends Component {
         
         return (
             <div className="App" style={bannerStyling}>
-                {renderIf(this.state.loginRendered) (
+                {renderIf(this.state.loginRndrd) (
                     <div>
                         <span style={signupMsgContainerStyling}> 
                             Want to join?&nbsp;
-                            <a href="#" style={signupLinkStyling} onClick={() => this.setState({signupRendered: true, loginRendered: false})}> 
+                            <a href="#" style={signupLinkStyling} onClick={() => this.setState({signupRndrd: true, loginRndrd: false})}> 
                                 Signup 
                             </a>
                             &nbsp;in seconds
                         </span>
-                        <Login onSubmit={this.loginRequestHandler.bind(this)}/>
+                        <Login onSubmit={this.loginReqHndlr.bind(this)}/>
                     </div>
                 )}
                 
-                {renderIf(this.state.signupRendered) (
-                    <Signup onSignupRequest={this.signupRequestHandler.bind(this)} />
+                {renderIf(this.state.signupRndrd) (
+                    <Signup onSignupRequest={this.signupReqHndlr.bind(this)} />
                 )}
                 
                 <img src={require('./redditImg.png')} style={redditImgStyling} />
                 
-                {renderIf(this.state.homePageRendered) (
+                {renderIf(this.state.homePgRndrd) (
                     <div className="postWrapper" style={wrapperStyling}>       
-                        <textarea style={postTxtBoxStyling} onChange={this.postTxtChngeHandler.bind(this)}/> 
-                        <button style={postSubmitBttnStyling} onClick={this.postSubmitHandler.bind(this)}> submit post </button>
+                        <textarea style={postTxtBoxStyling} onChange={this.postTxtChngeHndlr.bind(this)}/> 
+                        <button style={postSubmitBttnStyling} onClick={this.postSubmitHndlr.bind(this)}> submit post </button>
                         {this.state.postList}
                     </div>  
                 )}
                 
-                {renderIf(this.state.postPageRendered) (
+                {renderIf(this.state.postPgRndrd) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
                         <p style={commentHeader}> Comments </p>
                     
-                        <textarea style={commentTextBoxStyling} onChange={this.commentTextChangeHandler.bind(this)}/> 
-                        <button style={commentSubmissionBttnStyling} onClick={this.commentSubmissionHandler.bind(this)}> save </button>
+                        <textarea style={commentTextBoxStyling} onChange={this.comntTxtChngeHndlr.bind(this)}/> 
+                        <button style={commentSubmissionBttnStyling} onClick={this.comntSubmitHndlr.bind(this)}> save </button>
                     
-                        {renderIf(this.state.commentContainerRendered) (
+                        {renderIf(this.state.comntCntrRndrd) (
                             <div style={commentContainerStyling}>
                                 {this.state.commentList}
                             </div>                        
