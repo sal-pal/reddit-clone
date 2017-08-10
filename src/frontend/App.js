@@ -39,7 +39,7 @@ class App extends Component {
     componentDidMount() {
         //Enables navigating back to home page from post page
         window.onpopstate = function () {
-            this.setState({homePgRndrd: true, postPgRndrd: false, commentList: [], comntCntrRndrd: false})
+            this.setState({homePgRndrd: true, postPgRndrd: false, comntList: [], comntCntrRndrd: false})
         }.bind(this)
         
         const preparePostList = function(err, res) {
@@ -65,9 +65,11 @@ class App extends Component {
         //Navigate to post page and render the post just clicked on
         const targetPostID = e.target.attributes.getNamedItem('id').value
         const targetPost = findObjByKeyValPair(this.state.postObjects, ['id', targetPostID])
-        this.setState({targetPost: targetPost, homePgRndrd: false, postPgRndrd: true})
+        this.setState({targetPost: targetPost, homePgRndrd: false, postPgRndrd: true}, () => {
+            console.log(this.state.postPgRndrd)
+        })
         
-        //Load all the comments associated with the post just clicked on
+        //Load all the comnts associated with the post just clicked on
         const loadComments = function (err, res) {
             if (res.status === 200) {
                 
@@ -76,22 +78,22 @@ class App extends Component {
                 catch(err) {
                     const haveOneComment = (err.message === "All values of the input object need to be Object() instances")
                     if (haveOneComment) {
-                        const comment = res.body
-                        const commentComp = <Comment  
-                            author={comment.author} 
-                            body={comment.comment} 
+                        const comnt = res.body
+                        const comntComp = <Comment  
+                            author={comnt.author} 
+                            body={comnt.comment} 
                         />
-                        return this.setState({commentList: [commentComp], comntCntrRndrd: true})
+                        return this.setState({comntList: [comntComp], comntCntrRndrd: true})
                     }
                 }
-                const comments = getObjVals(resBody)
-                const commentList = comments.map(comment => {
+                const comnts = getObjVals(resBody)
+                const comntList = comnts.map(comnt => {
                     return <Comment  
-                        author={comment.author} 
-                        body={comment.comment} 
+                        author={comnt.author} 
+                        body={comnt.comment} 
                     />
                 })
-                return this.setState({commentList: commentList, comntCntrRndrd: true})
+                return this.setState({comntList: comntList, comntCntrRndrd: true})
             }    
         }            
           
@@ -155,7 +157,7 @@ class App extends Component {
         if (!this.state.activeUser) return alert('Please signup or login before making comments')
         if (!this.state.comntSubmitTxt) return alert('Comment needs to contain text')
         
-        const comment = {
+        const comnt = {
             author: this.state.activeUser,
             parent: this.state.targetPost.id,
             comment: this.state.comntSubmitTxt
@@ -163,21 +165,19 @@ class App extends Component {
         
         const callback = function(err, res) {
             if (res.status == 200) {
-                const commentComp = <Comment  
-                    author={comment.author} 
-                    body={comment.comment} 
+                const comntComp = <Comment  
+                    author={comnt.author} 
+                    body={comnt.comment} 
                 />
-                const commentList = this.state.commentList
-                commentList.unshift(commentComp)
-                this.setState({commentList: commentList, comntCntrRndrd: true})
+                const comntList = this.state.comntList
+                comntList.unshift(comntComp)
+                this.setState({comntList: comntList, comntCntrRndrd: true})
             }
         }
-        
-        
-        
+              
         request
             .post("http://localhost:5000/api/insertComment")
-            .send(comment)
+            .send(comnt)
             .end(callback.bind(this))
     }
     
@@ -208,8 +208,6 @@ class App extends Component {
                 this.setState({postList: postList})
             }
         }
-        
-        
         
         request
             .post("http://localhost:5000/api/insertPost")
@@ -260,14 +258,14 @@ class App extends Component {
             marginTop: '100px'
         }
         
-        const commentHeader = {
+        const comntHeader = {
             fontSize: '15px',
             fontWeight: '200',
             color: '#4D5763',
             marginTop: '8%'
         }
         
-        const commentContainerStyling = {
+        const comntContainerStyling = {
             marginLeft: '1%',
             marginRight: '18%',
             paddingLeft: '1%',            
@@ -276,13 +274,13 @@ class App extends Component {
             borderRadius: '5'
         }
         
-        const commentTextBoxStyling = {
+        const comntTextBoxStyling = {
             width: '500px',
             height: '100px',
             marginLeft: '1%'
         }
         
-        const commentSubmissionBttnStyling = {
+        const comntSubmissionBttnStyling = {
             display: 'block',
             marginLeft: '1%',
             marginBottom: '1%',
@@ -332,14 +330,14 @@ class App extends Component {
                 {renderIf(this.state.postPgRndrd) (
                     <div className="postPage" style={wrapperStyling}> 
                         <Post title={this.state.targetPost.title} author={this.state.targetPost.author} />
-                        <p style={commentHeader}> Comments </p>
+                        <p style={comntHeader}> Comments </p>
                     
-                        <textarea style={commentTextBoxStyling} onChange={this.comntTxtChngeHndlr.bind(this)}/> 
-                        <button style={commentSubmissionBttnStyling} onClick={this.comntSubmitHndlr.bind(this)}> save </button>
+                        <textarea style={comntTextBoxStyling} onChange={this.comntTxtChngeHndlr.bind(this)}/> 
+                        <button style={comntSubmissionBttnStyling} onClick={this.comntSubmitHndlr.bind(this)}> save </button>
                     
                         {renderIf(this.state.comntCntrRndrd) (
-                            <div style={commentContainerStyling}>
-                                {this.state.commentList}
+                            <div style={comntContainerStyling}>
+                                {this.state.comntList}
                             </div>                        
                         )}
                     </div>
