@@ -52,7 +52,7 @@ router.post('/insertPost', (req, res) => {
 })
 
 router.get('/getAllPosts', (req, res) => {
-    db.getAllPosts((result) => {
+    db.getAllPosts((err, result) => {
         res.json(result)
     })
 })
