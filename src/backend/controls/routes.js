@@ -9,9 +9,15 @@ const bodyParser = require('body-parser')
 const winston = require('winston')
 
 
-//Configuring logger
-winston.add(winston.transports.File, { filename: 'log.txt' });
-winston.level = 'error';
+
+//Configure logger
+winston.add(winston.transports.File, { filename: 'log.txt' })
+winston.level = 'error'
+
+
+//Create protected routes
+router.use('/insertComment', verifyAuth)
+router.use('/insertPost', verifyAuth)
 
 
 
