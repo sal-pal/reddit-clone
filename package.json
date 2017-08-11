@@ -25,7 +25,8 @@
     "react-dom": "^15.5.4",
     "react-image": "^1.0.1",
     "react-imageloader": "^2.1.0",
-    "render-if": "^0.1.1"
+    "render-if": "^0.1.1",
+    "winston": "^2.3.1"
   },
   "scripts": {
     "build": "react-scripts build",
