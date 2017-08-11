@@ -105,8 +105,8 @@ class App extends Component {
             } 
             const username = credentials.username
             const thnkYouMsg = () => alert('Thank you for logging in!')
-            const newStateData = {loginRndrd: false, activeUser: username}
-            if (res.status == 200) this.setState(newStateData, thnkYouMsg)
+            const newState = {loginRndrd: false, activeUser: username}
+            if (res.status == 200) this.setState(newState, thnkYouMsg)
         }
         
         request
