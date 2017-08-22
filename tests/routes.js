@@ -39,7 +39,7 @@ describe('Routes', () => {
     //Creates mock data
     const validCredentials = {username: 'valid username', password: 'valid password'}
     const singleComment = makeComments(1)
-    const parent = singleComment.parent
+    const id = singleComment.parent
     before(done => {   
         insertAllMockData(singleComment, validCredentials, (err, user) => {
             const userNotInsertedInDb = !user
@@ -74,47 +74,47 @@ describe('Routes', () => {
             .send({password: 'invalid password'})
             .expect(400, done)
     })
-    it('Responses from /insertComment should have 200 status after sending authenticated cookie', (done) => {
+    it('Responses from POST /comments should have 200 status after sending authenticated cookie', (done) => {
         request(server)
-            .post('/api/insertComment')
+            .post('/api/comments')
             .set('Content-Type', 'application/json')
             .set('Cookie', cookie)
             .send(makeComments(1))
             .expect(200, done)            
     })
-    it('Responses from /insertComment should have 401 status after not sending cookie', (done) => {
+    it('Responses from POST /comments should have 401 status after not sending cookie', (done) => {
         request(server)
-            .post('/api/insertComment')
+            .post('/api/comments')
             .set('Content-Type', 'application/json')
             .send(makeComments(1))
             .expect(401, done)            
     })
-    it('Responses from /insertPost should have 200 status after sending authenticated cookie', (done) => {
+    it('Responses from POST /posts should have 200 status after sending authenticated cookie', (done) => {
         request(server)
-            .post('/api/insertPost')
+            .post('/api/posts')
             .set('Content-Type', 'application/json')
             .set('Cookie', cookie)
             .send(makePosts(1))
             .set('Cookie', cookie)
             .expect(200, done)
     })
-    it('Responses from /insertPost should have 401 status after not sending cookie', (done) => {
+    it('Responses from POST /posts should have 401 status after not sending cookie', (done) => {
         request(server)
-            .post('/api/insertPost')
+            .post('/api/posts')
             .set('Content-Type', 'application/json')
             .send(makePosts(1))
             .expect(401, done)            
     })
-    it('Responses from /getAllPosts should have 200 status and a payload', (done) => {
+    it('Responses from GET /posts should have 200 status and a payload', (done) => {
         request(server)
-            .get('/api/getAllPosts')
+            .get('/api/posts')
             .expect(200)
             .expect(hasResBody)
             .end(done)
     })
-    it('Responses from /getCommentsByPost should have 200 status and a payload', (done) => {
+    it('Responses from GET /comments/:id should have 200 status and a payload', (done) => {
         request(server)
-            .get('/api/getCommentsByPost/' + parent)
+            .get('/api/comments/' + id)
             .expect(200)
             .expect(hasResBody)
             .end(done)
