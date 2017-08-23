@@ -16,8 +16,8 @@ winston.level = 'error'
 
 
 //Create protected routes
-router.use('/insertComment', verifyAuth)
-router.use('/insertPost', verifyAuth)
+router.post('/comments', verifyAuth)
+router.post('/posts', verifyAuth)
 
 
 
@@ -27,7 +27,7 @@ router.use('/insertPost', verifyAuth)
 router.post('/login',  (req, res, next) => {
     passport.authenticate('local-login', (err, user, info) => {
         if (err) {
-            const logMsg = JSON.stringify({routeName: 'login', errorName: err.name, errMsg: err.message})
+            const logMsg = JSON.stringify({endpoint: 'POST /login', errorName: err.name, errMsg: err.message})
             winston.log('error', logMsg)          
             return res.sendStatus(500)
         }  
@@ -35,7 +35,7 @@ router.post('/login',  (req, res, next) => {
         
         req.logIn(user, function(err) {
             if (err) {
-                const logMsg = JSON.stringify({routeName: 'login', errorName: err.name, errMsg: err.message})
+                const logMsg = JSON.stringify({endpoint: 'POST /login', errorName: err.name, errMsg: err.message})
                 winston.log('error', logMsg)      
                 return res.sendStatus(500)
             } 
@@ -47,7 +47,7 @@ router.post('/login',  (req, res, next) => {
 router.post('/signup', (req, res, next) => {
     passport.authenticate('local-signup', (err, user, info) => {
         if (err) {
-            const logMsg = JSON.stringify({routeName: 'signup', errorName: err.name, errMsg: err.message})
+            const logMsg = JSON.stringify({endpoint: 'POST /signup', errorName: err.name, errMsg: err.message})
             winston.log('error', logMsg)  
             return res.sendStatus(500)
         }
@@ -55,7 +55,7 @@ router.post('/signup', (req, res, next) => {
         
         req.logIn(user, function(err) {
             if (err) {
-                const logMsg = JSON.stringify({routeName: 'signup', errorName: err.name, errMsg: err.message})
+                const logMsg = JSON.stringify({endpoint: 'POST /signup', errorName: err.name, errMsg: err.message})
                 winston.log('error', logMsg) 
                 return res.sendStatus(500)
             }
@@ -64,40 +64,40 @@ router.post('/signup', (req, res, next) => {
     })(req, res, next)
 })
 
-router.post('/insertComment', (req, res) => {
+router.post('/comments', (req, res) => {
     db.insert('comment', req.body, (err) => {
         if (!err) return res.sendStatus(200)
         res.sendStatus(500)
-        const logMsg = JSON.stringify({routeName: 'insertComment', errorName: err.name, errMsg: err.message})
+        const logMsg = JSON.stringify({endpoint: 'POST /comments', errorName: err.name, errMsg: err.message})
         winston.log('error', logMsg)         
     })
 })
 
-router.post('/insertPost', (req, res) => {
+router.post('/posts', (req, res) => {
     db.insert('post', req.body, (err) => {
         if (!err) return res.sendStatus(200)
         res.sendStatus(500)
-        const logMsg = JSON.stringify({routeName: 'insertPost', errorName: err.name, errMsg: err.message})
+        const logMsg = JSON.stringify({endpoint: 'POST /posts', errorName: err.name, errMsg: err.message})
         winston.log('error', logMsg) 
     })
 })
 
-router.get('/getAllPosts', (req, res) => {
+router.get('/posts', (req, res) => {
     db.getAllPosts((err, result) => {
         if (!err) return res.json(result)
         res.sendStatus(500)
-        const logMsg = JSON.stringify({routeName: 'getAllPosts', errorName: err.name, errMsg: err.message})
+        const logMsg = JSON.stringify({endpoint: 'GET /posts', errorName: err.name, errMsg: err.message})
         winston.log('error', logMsg) 
     })
 })
 
-router.get('/getCommentsByPost/:parent', (req, res) => {
-    const parent = req.params.parent
-    db.getCommentsByPost(parent, (err, result) => {
+router.get('/comments/:id', (req, res) => {
+    const id = req.params.id
+    db.getCommentsByPost(id, (err, result) => {
         if (!err) return res.json(result)
         if (err.message === 'No comments found') return res.sendStatus(400)
         res.sendStatus(500)
-        const logMsg = JSON.stringify({routeName: 'getCommentsByPost', errorName: err.name, errMsg: err.message})
+        const logMsg = JSON.stringify({endpoint: 'GET /comments/:id', errorName: err.name, errMsg: err.message})
         winston.log('error', logMsg) 
     })
 })
