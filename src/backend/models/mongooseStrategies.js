@@ -80,18 +80,13 @@ mongooseStrategies.insert = function (modelName, inputObj, callback) {
 
 
 mongooseStrategies.getAllPosts = function (callback) {
-    Post.find({}, '-__v', {lean: true}, (err, result) => {
+    Post.find({}, '-__v -_id', {lean: true}, (err, result) => {
         if (err) return callback(err)
         if (result.length === 0) throw new Error('No posts found')
         if (result.length === 1) return callback(null, result[0])
         
-        const postsWithIds = result.map((post) => {
-            post.id = String(post._id)
-            delete post._id
-            return post
-        })
-        const finishedPosts = convertArrToObj(postsWithIds)
-        callback(null, finishedPosts)
+        const posts = convertArrToObj(result)
+        callback(null, posts)
     })    
 }
 
