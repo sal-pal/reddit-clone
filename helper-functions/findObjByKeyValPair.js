@@ -1,21 +1,19 @@
 /**
-        Given an object wrapper containing objects, this function will find the child object containing a 
-        desired key-value pair.
+        Searches inside an array for an object that contains a desired key-value pair.
         
-            -Output: An object
             -Input: 
-                a) An object wrapper
+                a) An array of objects used for the look up
                 b) An array whose first element is the desired key and whose second element is the desired 
                    value.    
 **/
 
 
-
-const getObjVals = require('./getObjVals.js')
-
-
-module.exports = function (objWrapper, keyValPair) {
-    //Check that passed an array
+module.exports = function (objects, keyValPair) {
+   
+    if (!Array.isArray(objects)) {
+        throw new TypeError("Need to pass an array for objects parameter")
+    }    
+    
     if (!Array.isArray(keyValPair)) {
         throw new TypeError("Need to pass an array for keyValPair parameter")
     }
@@ -26,7 +24,6 @@ module.exports = function (objWrapper, keyValPair) {
     }
     
     //Iterate until the object containing the desired key-value pair is found
-    const objects = getObjVals(objWrapper)
     for (var i=0; i < objects.length; i++) {
         const obj = objects[i]
         const desiredKey = keyValPair[0]

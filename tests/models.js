@@ -43,8 +43,8 @@ describe('getAllPosts', () => {
     it('returns an object containing all the posts of our app', done => {
         getAllPosts(result => {
             //Getting our posts in a form that allows us to test for equality
-            const postsArr = getObjVals(allPosts)
-            const sortedPostsArr = sortByProp(postsArr, 'title')
+            const postArr = getObjVals(allPosts)
+            const sortedPostsArr = sortByProp(postArr, 'title')
             const resultArr = getObjVals(result)
             const sortedResultArr = sortByProp(resultArr, 'title')
             

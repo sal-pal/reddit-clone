@@ -10,6 +10,7 @@ const Signup = require('./Signup.js')
 
 const findObjByKeyValPair = require('../../helper-functions/findObjByKeyValPair.js')
 const getObjVals = require('../../helper-functions/getObjVals.js')
+const ID = require('../../helper-functions/ID.js')
 const request = require('superagent')
 
 
@@ -24,7 +25,7 @@ class App extends Component {
                       postPgRndrd: false,
                       signupRndrd: false,
                       loginRndrd: true,
-                      postObjects: "", 
+                      postArr: "", 
                       targetPost: "", 
                       postList: [], 
                       comntList: [], 
@@ -38,8 +39,8 @@ class App extends Component {
     
     componentDidMount() {
         const preparePostList = function(err, res) {
-            const posts = getObjVals(res.body)
-            const postList = posts.map(post => {
+            const postArr = getObjVals(res.body)
+            const postList = postArr.map(post => {
                 return <Post 
                     title={post.title} 
                     author={post.author} 
@@ -48,7 +49,7 @@ class App extends Component {
                     onClick={this.clickPostHndlr.bind(this)} 
                 />
             })
-            this.setState({postList: postList, postObjects: res.body})
+            this.setState({postList: postList, postArr: postArr})
         }
         
         request
@@ -59,10 +60,8 @@ class App extends Component {
     clickPostHndlr(e) {
         //Navigate to post page and render the post just clicked on
         const targetPostID = e.target.attributes.getNamedItem('id').value
-        const targetPost = findObjByKeyValPair(this.state.postObjects, ['id', targetPostID])
-        this.setState({targetPost: targetPost, homePgRndrd: false, postPgRndrd: true}, () => {
-            console.log(this.state.postPgRndrd)
-        })
+        const targetPost = findObjByKeyValPair(this.state.postArr, ['id', targetPostID])
+        this.setState({targetPost: targetPost, homePgRndrd: false, postPgRndrd: true})
         
         //Load all the comnts associated with the post just clicked on
         const loadComments = function (err, res) {
@@ -187,7 +186,8 @@ class App extends Component {
         
         const post = {
             title: this.state.postSubmitTxt,
-            author: this.state.activeUser
+            author: this.state.activeUser,
+            id: ID()
         }
       
         const loadPost = function(err, res) {
@@ -195,12 +195,19 @@ class App extends Component {
                 const postComp = <Post  
                     title={post.title}
                     author={post.author}
+                    id={post.id}
                     titleHighlighted={true}
                     onClick={this.clickPostHndlr.bind(this)} 
                 />
+                
+                //Updated state.postList & state.postArr separately since updating them together caused an error
                 const postList = this.state.postList
                 postList.unshift(postComp)
                 this.setState({postList: postList})
+                
+                var postArr = this.state.postArr
+                postArr.push(post)
+                this.setState({postArr: postArr})
             }
         }
         
