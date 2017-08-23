@@ -52,7 +52,7 @@ class App extends Component {
         }
         
         request
-            .get("http://localhost:5000/api/getAllPosts")
+            .get("http://localhost:5000/api/posts")
             .end(preparePostList.bind(this))
     }
     
@@ -93,7 +93,7 @@ class App extends Component {
         }            
           
         request
-            .get("http://localhost:5000/api/getCommentsByPost/" + targetPostID)
+            .get("http://localhost:5000/api/comments/" + targetPostID)
             .end(loadComments.bind(this))
     }
     
@@ -171,7 +171,7 @@ class App extends Component {
         }
               
         request
-            .post("http://localhost:5000/api/insertComment")
+            .post("http://localhost:5000/api/comments")
             .send(comnt)
             .end(callback.bind(this))
     }
@@ -205,7 +205,7 @@ class App extends Component {
         }
         
         request
-            .post("http://localhost:5000/api/insertPost")
+            .post("http://localhost:5000/api/posts")
             .send(post)
             .end(loadPost.bind(this))
     }

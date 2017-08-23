@@ -129,7 +129,7 @@ describe('Routes', () => {
             .then(res => {
                 const signupCookie = res.headers['set-cookie']
                 request(server)
-                    .post('/api/insertPost')
+                    .post('/api/posts')
                     .set('Content-Type', 'application/json')
                     .set('Cookie', signupCookie)
                     .send(makePosts(1))
@@ -146,7 +146,7 @@ describe('Routes', () => {
             .then(res => {
                 const signupCookie = res.headers['set-cookie']
                 request(server)
-                    .post('/api/insertPost')
+                    .post('/api/posts')
                     .set('Content-Type', 'application/json')
                     .set('Cookie', signupCookie)
                     .send(makePosts(1))
