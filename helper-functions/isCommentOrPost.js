@@ -24,13 +24,15 @@ module.exports = (modelName, inputObj) => {
         
         const postHasTitle = inputObj.hasOwnProperty('title')
         const postHasAuthor = inputObj.hasOwnProperty('author')
-        const inputIsPost = (postHasTitle && postHasAuthor)
+        const postHasId = inputObj.hasOwnProperty('id')
+        const inputIsPost = (postHasTitle && postHasAuthor && postHasId)
         
         if (inputIsPost) {
             
             const titleIsString = (typeof inputObj.title === 'string')
             const authorIsString = (typeof inputObj.author === 'string')
-            const propsAreCorrectTypes = (titleIsString && authorIsString)
+            const idIsString = (typeof inputObj.id === 'string')
+            const propsAreCorrectTypes = (titleIsString && authorIsString && idIsString)
             
             if (propsAreCorrectTypes) return true
             else return false
