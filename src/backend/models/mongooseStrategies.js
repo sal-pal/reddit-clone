@@ -46,7 +46,7 @@ mongooseStrategies.insert = function (modelName, inputObj, callback) {
         //If inputObj's values are all posts, then insert all values into the db
         else if (areAllCommentsOrPosts('post', inputObj)) {
             const values = getObjVals(inputObj)
-            for (var i=0; i < values.length; i++){
+            for (var i=0; i < values.length; i++) {
                 var val = values[i]
                 const post = new Post(val)
                 post.save()
