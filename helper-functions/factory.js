@@ -1,4 +1,5 @@
 const faker = require('faker')
+const ID = require('./ID.js')
 
 
 
@@ -105,7 +106,9 @@ module.exports.makeComments = (amountToMk, customAttrs) => {
 function createPost() {
     return {
         title: faker.lorem.words(),
-        author: faker.lorem.words()
+        author: faker.lorem.words(),
+        id: ID(),
+        timestamp: Date.now().toString()
     }
 }
 
@@ -113,7 +116,8 @@ function createComment() {
     return {
         parent: faker.lorem.words(),
         comment: faker.lorem.sentences(),
-        author: faker.lorem.words()
+        author: faker.lorem.words(),
+        timestamp: Date.now().toString()
     }
 }
 
