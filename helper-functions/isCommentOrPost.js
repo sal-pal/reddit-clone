@@ -33,8 +33,8 @@ module.exports = (modelName, inputObj) => {
             const titleIsString = (typeof inputObj.title === 'string')
             const authorIsString = (typeof inputObj.author === 'string')
             const idIsString = (typeof inputObj.id === 'string')
-            const timestampIsNumber = (typeof inputObj.timestamp === 'number')
-            const propsAreCorrectTypes = (titleIsString && authorIsString && idIsString && timestampIsNumber)
+            const timestampIsString = (typeof inputObj.timestamp === 'string')
+            const propsAreCorrectTypes = (titleIsString && authorIsString && idIsString && timestampIsString)
             
             if (propsAreCorrectTypes) return true
             else return false
@@ -48,14 +48,16 @@ module.exports = (modelName, inputObj) => {
         const commentHasAuthor = inputObj.hasOwnProperty('author')
         const commentHasParent = inputObj.hasOwnProperty('parent')
         const commentHasComment = inputObj.hasOwnProperty('comment')
-        const inputIsComment = (commentHasAuthor && commentHasParent && commentHasComment)
+        const commentHasTimestamp = inputObj.hasOwnProperty('timestamp')
+        const inputIsComment = (commentHasAuthor && commentHasParent && commentHasComment && commentHasTimestamp)
         
         if (inputIsComment) {
             
             const authorIsString = (typeof inputObj.author === 'string')
             const parentIsString = (typeof inputObj.parent === 'string')
             const commentIsString = (typeof inputObj.comment === 'string')
-            const propsAreCorrectTypes = (authorIsString && parentIsString && commentIsString)
+            const timestampIsString = (typeof inputObj.timestamp === 'string')
+            const propsAreCorrectTypes = (authorIsString && parentIsString && commentIsString && timestampIsString)
             
             if (propsAreCorrectTypes) return true
             else return false

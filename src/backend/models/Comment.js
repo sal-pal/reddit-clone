@@ -15,6 +15,10 @@ const schema = new mongoose.Schema({
     comment: {
         type: String, 
         required: true
+    },
+    timestamp: {
+        type: String,
+        required: true
     }
 })
 
