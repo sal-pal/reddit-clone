@@ -14,6 +14,10 @@ const schema = new mongoose.Schema({
     id: {
         type: String,
         required: true
+    },
+    timestamp: {
+        type: String,
+        required: true
     }
 }) 
 
