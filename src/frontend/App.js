@@ -82,6 +82,7 @@ class App extends Component {
                     }
                 }
                 const comnts = getObjVals(resBody)
+                comnts.reverse()
                 const comntList = comnts.map(comnt => {
                     return <Comment  
                         author={comnt.author} 
