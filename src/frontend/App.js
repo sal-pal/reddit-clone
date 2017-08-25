@@ -40,6 +40,7 @@ class App extends Component {
     componentDidMount() {
         const preparePostList = function(err, res) {
             const postArr = getObjVals(res.body)
+            postArr.reverse()
             const postList = postArr.map(post => {
                 return <Post 
                     title={post.title} 
@@ -187,7 +188,8 @@ class App extends Component {
         const post = {
             title: this.state.postSubmitTxt,
             author: this.state.activeUser,
-            id: ID()
+            id: ID(),
+            timestamp: Date.now()
         }
       
         const loadPost = function(err, res) {
@@ -207,7 +209,7 @@ class App extends Component {
                 
                 var postArr = this.state.postArr
                 postArr.push(post)
-                this.setState({postArr: postArr})
+                this.setState({postArr: postArr}, () => console.log(this.state.postArr[postArr.length-1].timestamp))
             }
         }
         
